@@ -8,6 +8,7 @@ html, body
   margin:0;
   background: #fff;
   height: 100%;
+  font-size: 24px;
 }
 
 li {
@@ -27,3 +28,5 @@ a {
 
 input[type=button], input[type=submit], input[type=file], button { cursor: pointer; -webkit-appearance: none; } 
 .clear{clear: both;};
+
+
