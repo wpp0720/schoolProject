@@ -26,5 +26,11 @@ npm run e2e
 # run all tests
 npm test
 ```
+# mac上启动需要权限sudo
+
+# 使用mint-ui
+npm i mint-ui -S
+如果组件里样式使用scope 修改默认mint-ui样式时 是不起作用的 所以不建议使用scope
+
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
