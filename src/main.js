@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-// import  metaCommon from  '../static/js/meta-common.js'
+import '../static/js/meta-common.js'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 
 import '../static/css/base.less'
@@ -12,6 +12,8 @@ import 'mint-ui/lib/style.css'
 
 import 'vue-awesome/icons'
 import Icon from 'vue-awesome/components/Icon'
+Vue.component('icon',Icon)
+
 // import 'vue-awesome-swiper'
 import Mint  from 'mint-ui';
 import VueVideoPlayer from 'vue-video-player'
@@ -27,5 +29,5 @@ new Vue({
   el: '#app',
   router,
   template: '<App/>',
-  components: { App,Icon }
+  components: { App}
 })

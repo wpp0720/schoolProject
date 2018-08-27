@@ -15,19 +15,19 @@
      </mt-swipe>
    </div>
    <div class="list">
-     <dl class="list-item"><dt class="list-icon"></dt><dd class="list-text">学校简介</dd></dl>
-     <dl class="list-item"><dt class="list-icon"></dt><dd class="list-text">最新活动</dd></dl>
-     <dl class="list-item"><dt class="list-icon"></dt><dd class="list-text">名师库</dd></dl>
-     <dl class="list-item"><dt class="list-icon"></dt><dd class="list-text">最新通知</dd></dl>
-     <dl class="list-item"><dt class="list-icon"></dt><dd class="list-text">联系我们</dd></dl>
+     <dl class="list-item"><dt class="list-icon"><icon name="bars" scale="3"></icon></dt><dd class="list-text">学校简介</dd></dl>
+     <dl class="list-item"><dt class="list-icon"><icon name="bell" scale="3"></icon></dt><dd class="list-text">最新活动</dd></dl>
+     <dl class="list-item"><dt class="list-icon"><icon name="users" scale="3"></icon></dt><dd class="list-text">名师库</dd></dl>
+     <dl class="list-item"><dt class="list-icon"><icon name="comment" scale="3"></icon></dt><dd class="list-text">最新通知</dd></dl>
+     <dl class="list-item"><dt class="list-icon"><icon name="envelope" scale="3"></icon></dt><dd class="list-text">联系我们</dd></dl>
    </div>
    <div class="news">最新资讯<span class="new-list">eee</span></div>
    <div class="tobbar">
-    <dl class="tobbar-item"><dt class="tobbar-icon"></dt><dd class="tobbar-text">首页</dd></dl>
-    <dl class="tobbar-item"><dt class="tobbar-icon"></dt><dd class="tobbar-text">选课</dd></dl>
-     <dl class="tobbar-item"><dt class="tobbar-icon"></dt><dd class="tobbar-text">商城</dd></dl>
-     <dl class="tobbar-item"><dt class="tobbar-icon"></dt><dd class="tobbar-text">购物车</dd></dl>
-     <dl class="tobbar-item"><dt class="tobbar-icon"></dt><dd class="tobbar-text">我的</dd></dl>
+    <dl class="tobbar-item"><dt class="tobbar-icon"><icon name="home" scale="2"></icon></dt><dd class="tobbar-text">首页</dd></dl>
+    <dl class="tobbar-item"><dt class="tobbar-icon"><icon name="book" scale="2"></icon></dt><dd class="tobbar-text">选课</dd></dl>
+     <dl class="tobbar-item"><dt class="tobbar-icon"><icon name="server" scale="2"></icon></dt><dd class="tobbar-text">商城</dd></dl>
+     <dl class="tobbar-item"><dt class="tobbar-icon"><icon name="cart-arrow-down" scale="2"></icon></dt><dd class="tobbar-text">购物车</dd></dl>
+     <dl class="tobbar-item"><dt class="tobbar-icon"><icon name="user" scale="2"></icon></dt><dd class="tobbar-text">我的</dd></dl>
    </div>
   </div>
 </template>
@@ -113,7 +113,14 @@ export default {
     border-radius:104px;
     border: 1px #66b7f6 solid;
     margin: 15px auto;
+    text-align: center;
+    line-height: 104px;
+    color: #66b7f6;
 
+
+  }
+  .list .list-icon .fa-icon{
+    vertical-align:middle
   }
   .list .list-text{
     color: #333;
@@ -160,6 +167,12 @@ export default {
     height: 40px;
     margin: 0 auto;
     padding: 5px;
+    color:#1e88f5 ;
+    text-align: center;
+
+  }
+  .tobbar .tobbar-item .tobbar-icon .fa-icon{
+    vertical-align: middle;
   }
   .tobbar .tobbar-item .tobbar-text{
 
