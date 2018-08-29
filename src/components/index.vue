@@ -2,12 +2,39 @@
   <div id="index">
   <div class="top">
     <div class="select">
-      <div>选择校区 ></div>
+      <div @click="chooseArea"><span id="scName">{{scName}}</span> <icon name="angle-down" scale="2"></icon></div>
+
+      <mt-popup
+        v-model="schoolAreaPopupVisible"
+        position="bottom">
+        <slot><vue-pickers
+          :show="schoolAreaPopupVisible"
+          :defaultData="schoolAreadefaultData"
+          :selectData="schoolSlots"
+          @cancel="schoolAreaclose"
+          @confirm="schoolAreaconfirmFn"></vue-pickers>
+        </slot>
+      </mt-popup>
+
+
+      <!--<slot><mt-picker :slots="schoolSlots" :itemHeight="72" :visibleItemCount="10" @change="onValuesChange"></mt-picker></slot>-->
+
+      <!--<mt-actionsheet-->
+        <!--:actions="schoolData"-->
+        <!--v-model="sheetVisible">-->
+      <!--</mt-actionsheet>-->
+
+      <!--<mt-popup-->
+        <!--v-model="popupVisible"-->
+        <!--popup-transition="popup-fade"-->
+        <!--&gt;-->
+        <!--<slot><ul class="sc-list" v-for="(item, index) in schoolData"><li class="sc-list-item">{{item}}</li></ul></slot>-->
+      <!--</mt-popup>-->
     </div>
-    <div class="search"><mt-search v-model="value" placeholder="搜索"></mt-search></div>
+    <div class="search"><mt-search placeholder="搜索"></mt-search></div>
+
    </div>
    <div class="banner">
-     <!--<img src="../../static/img/ceshi.jpg" class="banner-img"/>-->
      <mt-swipe :auto="4000">
        <mt-swipe-item><img src="../assets/index/swiper/1.png"></mt-swipe-item>
        <mt-swipe-item><img src="../assets/index/swiper/2.png"></mt-swipe-item>
@@ -33,8 +60,75 @@
 </template>
 
 <script>
+  import vuePickers from 'vue-pickers'
 export default {
-  name: "index"
+  name: "index",
+  components: {vuePickers},
+  data() {
+    var _self=this;
+    return {
+      schoolAreaPopupVisible:false,
+      scName:'选择校区',
+      schoolAreadefaultData:[],
+      schoolSlots:{
+       data1:[
+         {
+           text: '金色梯田培训学校',
+           value: '金色梯田培训学校'
+         },
+         {
+           text: '天心校区',
+           value: '天心校区'
+         },
+         {
+           text: '潮人部落',
+           value: '潮人部落'
+         },
+         {
+           text: '金色阳光',
+           value: '金色阳光'
+         },
+         {
+           text: '临县一中校区',
+           value: '临县一中校区'
+         },
+         {
+           text: '清华附中',
+           value: '清华附中'
+         },
+         {
+           text: '华中示范',
+           value: '华中示范'
+         }
+       ],
+
+      },
+
+    }
+  },
+  mounted(){
+    this.schoolAreadefaultData=this.schoolSlots.data1.slice(0,1);
+  },
+  methods:{
+    chooseArea(){
+      this.schoolAreaPopupVisible = true;
+    },
+    schoolAreaclose() {
+      this.schoolAreaPopupVisible = false
+    },
+    schoolAreaconfirmFn(val) {
+      this.schoolAreaPopupVisible = false
+      if(val.select1.text.length <= 4){
+        this.scName = val.select1.text
+      }else{
+        this.scName = val.select1.text.substring(0,4)+'...'
+      }
+
+    },
+    toShow() {
+
+    }
+  }
 };
 </script>
 <style lang="less">
@@ -53,10 +147,20 @@ export default {
     line-height: 60px;
     padding: 15px 0;
   }
+  .select .fa-icon{
+    position: relative;
+    top: 5px;
+
+  }
+  .select .mint-popup-bottom{
+    width: 100%;
+  }
+
   .mint-search{
     padding: 0;
     height: auto;
   }
+
   .mint-searchbar-inner{
     height: 40px;
     line-height: 40px;
@@ -174,9 +278,7 @@ export default {
   .tobbar .tobbar-item .tobbar-icon .fa-icon{
     vertical-align: middle;
   }
-  .tobbar .tobbar-item .tobbar-text{
 
-  }
   /*!*.index .top .serch input{width: 550px;float: left;font-size: 33px;border-radius: 200px;height: 60px;}*!*/
 /*.index .banner{width: 100%;height: 347px;}*/
 /*.index .list{width: 100%;height: 210px;display: flex;justify-content: center;}*/

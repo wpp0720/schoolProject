@@ -37,5 +37,10 @@ npm install vue-awesome
 https://justineo.github.io/vue-awesome/demo/
 查看图标可以去font awesome官网上查看，vue-awesome是基于font awesome图标库来的
 
+# 使用vue-pickers
+npm install vue-pickers --save
+a picker componemt for vue2.0
+https://segmentfault.com/a/1190000010907490
+http://gitblog.naice.me/vue-picker/example/index.html#/
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
