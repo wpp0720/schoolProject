@@ -279,6 +279,9 @@ export default {
     vertical-align: middle;
   }
 
+  #h-picker .area_ctrl[data-v-40365903]{
+    font-size: 20px;
+  }
   /*!*.index .top .serch input{width: 550px;float: left;font-size: 33px;border-radius: 200px;height: 60px;}*!*/
 /*.index .banner{width: 100%;height: 347px;}*/
 /*.index .list{width: 100%;height: 210px;display: flex;justify-content: center;}*/
