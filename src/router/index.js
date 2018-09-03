@@ -8,6 +8,18 @@ import teacherTeam from '@/components/teacherTeam'
 import curriculaVariable from '@/components/curriculaVariable'
 
 
+import PersonalIndex from '@/components/personal/PersonalIndex'
+import like from '@/components/personal/like'
+import orderDetails from '@/components/personal/orderDetails'
+import myOrder from '@/components/personal/myOrder'
+import setting from '@/components/personal/setting'
+import myAddress from '@/components/personal/myAddress'
+import addSite from '@/components/personal/addSite'
+import myLogin from '@/components/personal/myLogin'
+import modifyPass from '@/components/personal/modifyPass'
+import myRegister from '@/components/personal/myRegister'
+
+
 Vue.use(Router)
 
 export default new Router({
@@ -47,6 +59,56 @@ export default new Router({
       path: '/curriculaVariable',
       name: 'curriculaVariable',
       component: curriculaVariable
-    }
+    },
+      {
+          path: '/PersonalIndex',
+          name: 'PersonalIndex',
+          component: PersonalIndex
+      },
+      {
+          path: '/like',
+          name: 'like',
+          component: like
+      },
+      {
+          path: '/orderDetails',
+          name: 'orderDetails',
+          component: orderDetails
+      },
+      {
+          path: '/myOrder',
+          name: 'myOrder',
+          component: myOrder
+      },
+      {
+          path: '/setting',
+          name: 'setting',
+          component: setting
+      },
+      {
+          path: '/myAddress',
+          name: 'myAddress',
+          component: myAddress
+      },
+      {
+          path: '/addSite',
+          name: 'addSite',
+          component: addSite
+      },
+      {
+          path: '/myLogin',
+          name: 'myLogin',
+          component: myLogin
+      },
+      {
+          path: '/modifyPass',
+          name: 'modifyPass',
+          component: modifyPass
+      },
+      {
+          path: '/myRegister',
+          name: 'myRegister',
+          component: myRegister
+      }
   ]
 });
