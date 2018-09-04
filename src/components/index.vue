@@ -3,7 +3,6 @@
   <div class="top">
     <div class="select">
       <div @click="chooseArea"><span id="scName">{{scName}}</span> <icon name="angle-down" scale="2"></icon></div>
-
       <mt-popup
         v-model="schoolAreaPopupVisible"
         position="bottom">
@@ -15,21 +14,6 @@
           @confirm="schoolAreaconfirmFn"></vue-pickers>
         </slot>
       </mt-popup>
-
-
-      <!--<slot><mt-picker :slots="schoolSlots" :itemHeight="72" :visibleItemCount="10" @change="onValuesChange"></mt-picker></slot>-->
-
-      <!--<mt-actionsheet-->
-        <!--:actions="schoolData"-->
-        <!--v-model="sheetVisible">-->
-      <!--</mt-actionsheet>-->
-
-      <!--<mt-popup-->
-        <!--v-model="popupVisible"-->
-        <!--popup-transition="popup-fade"-->
-        <!--&gt;-->
-        <!--<slot><ul class="sc-list" v-for="(item, index) in schoolData"><li class="sc-list-item">{{item}}</li></ul></slot>-->
-      <!--</mt-popup>-->
     </div>
     <div class="search"><mt-search placeholder="搜索"></mt-search></div>
 
@@ -42,11 +26,16 @@
      </mt-swipe>
    </div>
    <div class="list">
-     <dl class="list-item"><dt class="list-icon"><icon name="bars" scale="3"></icon></dt><dd class="list-text">学校简介</dd></dl>
-     <dl class="list-item"><dt class="list-icon"><icon name="bell" scale="3"></icon></dt><dd class="list-text">最新活动</dd></dl>
-     <dl class="list-item"><dt class="list-icon"><icon name="users" scale="3"></icon></dt><dd class="list-text">名师库</dd></dl>
-     <dl class="list-item"><dt class="list-icon"><icon name="comment" scale="3"></icon></dt><dd class="list-text">最新通知</dd></dl>
-     <dl class="list-item"><dt class="list-icon"><icon name="envelope" scale="3"></icon></dt><dd class="list-text">联系我们</dd></dl>
+     <swiper :options="swiperOption">
+     <swiper-slide><dl class="list-item"><dt class="list-icon"><icon name="bars" scale="3"></icon></dt><dd class="list-text">学校简介</dd></dl></swiper-slide>
+     <swiper-slide><dl class="list-item"><dt class="list-icon"><icon name="bell" scale="3"></icon></dt><dd class="list-text">最新活动</dd></dl></swiper-slide>
+     <swiper-slide><dl class="list-item"><dt class="list-icon"><icon name="users" scale="3"></icon></dt><dd class="list-text">名师库</dd></dl></swiper-slide>
+     <swiper-slide><dl class="list-item"><dt class="list-icon"><icon name="comment" scale="3"></icon></dt><dd class="list-text">最新通知</dd></dl></swiper-slide>
+     <swiper-slide><dl class="list-item"><dt class="list-icon"><icon name="envelope" scale="3"></icon></dt><dd class="list-text">联系我们</dd></dl></swiper-slide>
+     <swiper-slide><dl class="list-item"><dt class="list-icon"><icon name="envelope" scale="3"></icon></dt><dd class="list-text">投诉建议</dd></dl></swiper-slide>
+     <swiper-slide><dl class="list-item"><dt class="list-icon"><icon name="envelope" scale="3"></icon></dt><dd class="list-text">师资力量</dd></dl></swiper-slide>
+     <swiper-slide><dl class="list-item"><dt class="list-icon"><icon name="flag" scale="3"></icon></dt><dd class="list-text">我们的特色</dd></dl></swiper-slide>
+     </swiper>
    </div>
    <div class="news">最新资讯<span class="new-list">eee</span></div>
    <div class="tobbar">
@@ -103,6 +92,9 @@ export default {
        ],
 
       },
+      swiperOption:{
+        slidesPerView: 'auto',
+      }
 
     }
   },
@@ -282,8 +274,8 @@ export default {
   #h-picker .area_ctrl[data-v-40365903]{
     font-size: 20px;
   }
-  /*!*.index .top .serch input{width: 550px;float: left;font-size: 33px;border-radius: 200px;height: 60px;}*!*/
-/*.index .banner{width: 100%;height: 347px;}*/
-/*.index .list{width: 100%;height: 210px;display: flex;justify-content: center;}*/
-/*.index .banner .banner-img{width: 100%;height: 347px;}*/
+
+.swiper-slide{
+  width: 150px;
+}
 </style>

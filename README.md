@@ -43,4 +43,10 @@ a picker componemt for vue2.0
 https://segmentfault.com/a/1190000010907490
 http://gitblog.naice.me/vue-picker/example/index.html#/
 
+# 使用vue-awesome-swiper
+2.6.7版本需要单独引入swiper/dist/css目录下的swiper.css样式文件
+2.5.4不需要单独引入样式文件
+
+
+
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).

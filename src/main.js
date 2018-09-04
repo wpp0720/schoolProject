@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 
+import 'swiper/dist/css/swiper.css'
 import '../static/css/base.less'
 import '../static/css/viewportBase.less'
 import 'mint-ui/lib/style.css'
