@@ -4,7 +4,6 @@
      <div class="no-data-img"></div>
      <div class="no-data-font">暂无其他结果，请到别的地方看看吧</div>
    </div>
-
   </div>
 </template>
 
@@ -13,7 +12,7 @@ export default {
   name: 'school',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: ''
     }
   }
 }

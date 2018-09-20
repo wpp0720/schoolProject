@@ -3,27 +3,26 @@
   <div class="top">
     <div class="select">
       <div @click="chooseArea"><span id="scName">{{scName}}</span> <icon name="angle-down" scale="2"></icon></div>
-      <mt-popup
-        v-model="schoolAreaPopupVisible"
-        position="bottom">
-        <slot><vue-pickers
-          :show="schoolAreaPopupVisible"
-          :defaultData="schoolAreadefaultData"
-          :selectData="schoolSlots"
-          @cancel="schoolAreaclose"
-          @confirm="schoolAreaconfirmFn"></vue-pickers>
-        </slot>
-      </mt-popup>
+      <van-popup v-model="schoolAreaPopupVisible" position="bottom">
+        <van-picker
+          show-toolbar
+          :columns="schoolSlots"
+          item-height="70"
+          @cancel="onCancel"
+          @confirm="onConfirm"
+          visible-item-count="5"
+        />
+      </van-popup>
     </div>
-    <div class="search"><mt-search placeholder="搜索"></mt-search></div>
+    <div class="search"><van-search placeholder="请输入搜索关键词" v-model="value" /></div>
 
    </div>
    <div class="banner">
-     <mt-swipe :auto="4000">
-       <mt-swipe-item><img src="../assets/index/swiper/1.png"></mt-swipe-item>
-       <mt-swipe-item><img src="../assets/index/swiper/2.png"></mt-swipe-item>
-       <mt-swipe-item><img src="../assets/index/swiper/3.png"></mt-swipe-item>
-     </mt-swipe>
+     <van-swipe :autoplay="3000">
+       <van-swipe-item><img src="../assets/index/swiper/1.png"></van-swipe-item>
+       <van-swipe-item><img src="../assets/index/swiper/2.png"></van-swipe-item>
+       <van-swipe-item><img src="../assets/index/swiper/3.png"></van-swipe-item>
+     </van-swipe>
    </div>
    <div class="list">
      <swiper :options="swiperOption">
@@ -45,22 +44,21 @@
      <dl class="tobbar-item"><dt class="tobbar-icon"><icon name="cart-arrow-down" scale="2"></icon></dt><dd class="tobbar-text">购物车</dd></dl>
      <dl class="tobbar-item"><dt class="tobbar-icon"><icon name="user" scale="2"></icon></dt><dd class="tobbar-text">我的</dd></dl>
    </div>
+
   </div>
+
 </template>
 
 <script>
-  import vuePickers from 'vue-pickers'
 export default {
   name: "index",
-  components: {vuePickers},
+  components: {},
   data() {
     var _self=this;
     return {
       schoolAreaPopupVisible:false,
       scName:'选择校区',
-      schoolAreadefaultData:[],
-      schoolSlots:{
-       data1:[
+      schoolSlots:[
          {
            text: '金色梯田培训学校',
            value: '金色梯田培训学校'
@@ -90,20 +88,30 @@ export default {
            value: '华中示范'
          }
        ],
-
-      },
       swiperOption:{
         slidesPerView: 'auto',
       }
-
+//      popupVisible:false
     }
   },
   mounted(){
-    this.schoolAreadefaultData=this.schoolSlots.data1.slice(0,1);
   },
   methods:{
     chooseArea(){
-      this.schoolAreaPopupVisible = true;
+      this.schoolAreaPopupVisible = true
+    },
+    onConfirm(val, index) {
+      this.schoolAreaPopupVisible = false
+
+      if(val.text.length <= 4){
+        this.scName = val.text
+      }else{
+        this.scName = val.text.substring(0,4)+'...'
+      }
+
+    },
+    onCancel() {
+      this.schoolAreaPopupVisible = false
     },
     schoolAreaclose() {
       this.schoolAreaPopupVisible = false
@@ -115,16 +123,15 @@ export default {
       }else{
         this.scName = val.select1.text.substring(0,4)+'...'
       }
-
     },
-    toShow() {
+    showDia(popupVisible,cpName) {
+
 
     }
   }
 };
 </script>
 <style lang="less">
-
   #index{
     height: 100%;
     background: #eef1f6;
@@ -144,32 +151,11 @@ export default {
     top: 5px;
 
   }
-  .select .mint-popup-bottom{
-    width: 100%;
-  }
 
-  .mint-search{
-    padding: 0;
-    height: auto;
-  }
 
-  .mint-searchbar-inner{
-    height: 40px;
-    line-height: 40px;
-    border-radius:50px;
-    padding: 4px 6px;
-  }
-  .mint-searchbar-core{
-    font-size: 24px;
-    margin-left: 5px;
-  }
 
-  .mint-searchbar{
-    background-color:transparent;
-  }
-  .mint-searchbar-inner .mintui-search{
-    font-size: 30px;
-  }
+
+
    .top .select{
     width: 200px;
     font-size: 28px;
@@ -178,7 +164,17 @@ export default {
   }
   .top .search{
     width: 70%;
+   .van-cell__left-icon{
+    font-size: 24px;
+    position: relative;
+    top: 8px;
   }
+  .van-search .van-cell{
+    padding: 8px 10px;
+    border-radius:50px;
+  }
+  }
+
   .banner{
     width: 100%;
     height: 400px;
@@ -188,9 +184,7 @@ export default {
     width: 100%;
     height: 400px;
   }
-  .mint-swipe-indicator{
-    width: 15px;
-  }
+
   .list{
     display: -webkit-flex; /* Safari */
     display: flex;
@@ -271,10 +265,14 @@ export default {
     vertical-align: middle;
   }
 
-  #h-picker .area_ctrl[data-v-40365903]{
-    font-size: 20px;
+
+  .van-picker-column{
+    font-size: 32px;
   }
 
+  .van-picker__cancel, .van-picker__confirm{
+    padding-top: 10px;
+  }
 .swiper-slide{
   width: 150px;
 }
