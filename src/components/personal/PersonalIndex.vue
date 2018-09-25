@@ -51,7 +51,7 @@ export default {
 		    img3:require('../../assets/img/1.3.png'),
 		    img4:require('../../assets/img/1.4.png'),
 		    icon1:require('../../assets/img/icon1.png'),
-		    icon2:require('../../assets/img/icon2.png'),
+		    icon2:require('../../assets/img/'),
 		    icon3:require('../../assets/img/icon3.png'),
 		}
 	}
