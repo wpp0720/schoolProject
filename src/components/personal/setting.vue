@@ -8,7 +8,7 @@
 			<mt-cell title="手机号码" to="" value="1212121212"></mt-cell>
 			<mt-cell title="在读年纪" to="" value="大班"></mt-cell>
 			
-			<mt-cell title="收货地址" to="" is-link value=""></mt-cell>
+			<!--<mt-cell title="收货地址" to="" is-link value=""></mt-cell>-->
 			<mt-cell title="修改密码" to="" is-link value=""></mt-cell>
 			
 			<div class="quit">退出登录</div>

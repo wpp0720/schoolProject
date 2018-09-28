@@ -27,12 +27,24 @@ module.exports = {
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
-    // CSS Sourcemaps off by default because relative paths are "buggy"
-    // with this option, according to the CSS-Loader README
-    // (https://github.com/webpack/css-loader#sourcemaps)
-    // In our experience, they generally work as expected,
-    // just be aware of this issue when enabling this option.
-    cssSourceMap: false
+    proxyTable: {
+        '/apis':{
+            target:'http://demo.rexuejiewu.com.cn:8099/api',
+            changeOrigin:true,
+            pathRewrite:{
+                '^/api':'/api'
+            }
+        }
+    },
+
+    // // CSS Sourcemaps off by default because relative paths are "buggy"
+    // // with this option, according to the CSS-Loader README
+    // // (https://github.com/webpack/css-loader#sourcemaps)
+    // // In our experience, they generally work as expected,
+    // // just be aware of this issue when enabling this option.
+    cssSourceMap: false,
+
+      // Various Dev Server settings
+      // host: 'web.epailive.com', // can be overwritten by process.env.HOST
   }
 }

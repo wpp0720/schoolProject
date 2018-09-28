@@ -6,33 +6,39 @@
 			<p class="number">学员学号:<span>S12716</span></p>
 		</div>
 		<div class="tab">
-			
-			<div class="tab1">
+			<router-link to="/myOrder">
+			<div class="tab1 tabBox">
 				<img :src="img1"/>
 				<p>订单</p>
 			</div>
-			
-			<div class="tab2">
+			</router-link>
+			<router-link to="/myOrder">
+			<div class="tab2 tabBox">
 				<img :src="img2"/>
 				<p>代付款</p>
 			</div>
-			<div class="tab3">
+			</router-link>
+			<router-link to="/myOrder">
+			<div class="tab3 tabBox">
 				<img :src="img3"/>
 				<p>已付款</p>
 			</div>
-			<div class="tab4">
+			</router-link>
+			<router-link to="/myOrder">
+			<div class="tab4 tabBox">
 				<img :src="img4"/>
 				<p>待评价</p>
 			</div>
+			</router-link>
 		</div>
 		<div class="list">
-			<mt-cell title="优惠券" to="" is-link value="">
+			<mt-cell title="优惠券" to="/coupon" is-link value="">
 				<img slot="icon" :src="icon1" width="24" height="24">
 			</mt-cell>
-			<mt-cell title="喜欢" to="" is-link value="">
+			<mt-cell title="喜欢" to="/like" is-link value="">
 				<img slot="icon" :src="icon2" width="24" height="24">
 			</mt-cell>
-			<mt-cell title="设置" to="" is-link value="">
+			<mt-cell title="设置" to="/setting" is-link value="">
 				<img slot="icon" :src="icon3" width="24" height="24">
 			</mt-cell>
 		</div>
@@ -41,6 +47,7 @@
 </template>
 
 <script>
+
 
 export default {
 	data () {
@@ -51,7 +58,7 @@ export default {
 		    img3:require('../../assets/img/1.3.png'),
 		    img4:require('../../assets/img/1.4.png'),
 		    icon1:require('../../assets/img/icon1.png'),
-		    icon2:require('../../assets/img/icon1.png'),
+		    icon2:require('../../assets/img/icon2.png'),
 		    icon3:require('../../assets/img/icon3.png'),
 		}
 	}
@@ -95,18 +102,18 @@ export default {
 	background-color: #FFFFFF;
 	margin-bottom: 0.5rem;
 }
-.PersonalIndex .tab>div {
+.PersonalIndex .tab .tabBox {
 	width: 25%;
 	height: 100%;
 	float: left;
 	text-align: center;
 	color: #666666;
 }
-.PersonalIndex .tab>div img {
+.PersonalIndex .tab .tabBox img {
 	margin-top: 2rem;
 	margin-bottom: 1rem;
 }
-.PersonalIndex .tab>div p {
+.PersonalIndex .tab .tabBox p {
 	font-size: 1.5rem;
 }
 .mint-cell:nth-child(1) {

@@ -7,7 +7,7 @@ axios.defaults.withCredentials=true;
 
   // axios.defaults.baseURL = 'http://test10.epailive.com';
   //  axios.defaults.baseURL = 'http://kf.epailive.com:8880';
-   axios.defaults.baseURL =baseAjaxUrl;
+   axios.defaults.baseURL ='';
 //响应拦截器
 // axios.interceptors.response.use((res) => {
 //   if (!res.data.success) {
