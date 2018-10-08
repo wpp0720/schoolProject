@@ -25,6 +25,7 @@
 			</div>
 	
 		</div>
+        <div class="errorMes">用户名或密码错误</div>
 		
 	</div>
 </template>
@@ -65,18 +66,20 @@
                     });
             },
             submitForm:function () {
-				let loginData = {
-                    username:this.userName,
-                    password:this.myPassword
-				};
-				api.submitLogin(loginData)
+				let loginData = new URLSearchParams();
+                loginData.append('username',this.userName)
+                loginData.append('password',this.myPassword)
+                console.log(loginData);
+                api.submitLogin(loginData)
 					.then(res=>{
                         console.log(res);
-                        if(res.data){
+                        if(res.code == 1){
                             this.active = true;
-						}
+						}else if(res.code == 0){
+
+                        }
 				},()=>{
-					alert('连接失败');
+					alert('登录失败');
 				});
             }
 		}
