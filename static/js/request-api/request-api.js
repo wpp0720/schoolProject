@@ -1,7 +1,8 @@
 //直播api请求
 import { fetchPost,fetchGet } from '../request-util.js'
 import {baseLiveAjaxUrl} from '../config/global-config.js'
-let baseUrl = 'http://127.0.0.1:3000/api/api';
+let baseUrl = '/api';
+// let baseUrl = 'http://api.rexuejiewu.com.cn';
 export   const  api={
     /**
      * 测试
@@ -11,7 +12,12 @@ export   const  api={
     },
     submitLogin(params){
         return fetchPost(baseUrl+'/user/login',params)
+    },
+    //清空购物车
+    clearProductToCart(params){
+        return fetchGet(baseUrl+'/cart/clearProductToCart',params)
     }
+
 
    
 }
