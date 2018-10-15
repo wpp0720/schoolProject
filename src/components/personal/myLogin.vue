@@ -48,25 +48,8 @@
         mounted:function () {
             this.register=this.$route.query.myRegister
             console.log(this.register)
-		    this.getCouponList();
         },
         methods:{
-            getCouponList: function() {
-                let params = {};
-                params.page=1;
-                params.row=5;
-
-                api.refreshCouponList(params)
-                    .then(res => {
-                        if (res.status == 200) {
-                            console.log(res.data);
-
-                        }
-                    })
-                    .catch(error => {
-
-                    });
-            },
             submitForm:function () {
 				let loginData = new URLSearchParams();
 				let returnUrl = window.location.href;

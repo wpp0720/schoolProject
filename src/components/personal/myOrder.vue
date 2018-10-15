@@ -120,7 +120,7 @@
 		},
 		mounted:function () {
 			this.getCouponList();
-			this.getOrderList();
+//			this.getOrderList();
 		},
         methods:{
             getCouponList: function() {
