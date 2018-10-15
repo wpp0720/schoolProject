@@ -109,15 +109,54 @@
 </template>
  
 <script>
-export default { 
-  data() {
-    return {
-      selected: '1',
-			img:require('../../assets/img/payment.png'),
-			defaultImg:require('../../assets/img/goodsPhoto.png')
-    };
-  }
-};
+    import {api} from  '../../../static/js/request-api/request-api.js';
+	export default {
+		data() {
+			return {
+			  selected: '1',
+					img:require('../../assets/img/payment.png'),
+					defaultImg:require('../../assets/img/goodsPhoto.png')
+			};
+		},
+		mounted:function () {
+			this.getCouponList();
+			this.getOrderList();
+		},
+        methods:{
+            getCouponList: function() {
+                let params = {};
+                params.page=1;
+                params.row=5;
+
+                api.refreshCouponList(params)
+                    .then(res => {
+                        if (res.status == 200) {
+                            console.log(res.data);
+
+                        }
+                    })
+                    .catch(error => {
+
+                    });
+            },
+            getOrderList: function() {
+                let params = {};
+                params.page=1;
+                params.row=5;
+
+                api.refreshSaleOrderList(params)
+                    .then(res => {
+                        if (res.status == 200) {
+                            console.log(res.data);
+
+                        }
+                    })
+                    .catch(error => {
+
+                    });
+            }
+		}
+	};
 </script>
 <style scoped>
 .page-navbar {

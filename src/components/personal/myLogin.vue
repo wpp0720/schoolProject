@@ -51,7 +51,7 @@
 		    this.getCouponList();
         },
         methods:{
-            getCouponList: function(catId, event) {
+            getCouponList: function() {
                 let params = {};
                 params.page=1;
                 params.row=5;
@@ -77,11 +77,8 @@
 					.then(res=>{
                         console.log(res);
                         if(res.code == 1){
-                            if(this.register=="register"){
-                                this.$router.push({path: "/index", query: {returnUrl: returnUrl}});
-                            }else{
-                                this.$router.back(-1)
-                            }
+//                          this.$router.push({path: "/index", query: {returnUrl: returnUrl}});
+							this.$router.push({path: "/myOrder"});
 
                             this.active = true;
 						}else if(res.code == 0){

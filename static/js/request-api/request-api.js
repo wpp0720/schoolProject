@@ -11,7 +11,11 @@ export   const  api={
     },
     submitLogin(params){
         return fetchPost(baseUrl+'/user/login',params)
-    }
+    },
+    refreshSaleOrderList(params){
+        return fetchGet(baseUrl+'/product/refreshSaleOrderList',params);
+    },
+
 
    
 }
