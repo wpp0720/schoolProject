@@ -121,7 +121,7 @@ export default new Router({
             name: 'myLogin',
             component: myLogin
         },
-        /*{
+        {
             path: '/modifyPass',
             name: 'modifyPass',
             component: modifyPass
@@ -135,6 +135,6 @@ export default new Router({
             path: '/coupon',
             name: 'coupon',
             component: coupon
-        }*/
+        }
     ]
 });
