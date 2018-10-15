@@ -48,42 +48,21 @@
         mounted:function () {
             this.register=this.$route.query.myRegister
             console.log(this.register)
-		    this.getCouponList();
         },
         methods:{
-            getCouponList: function(catId, event) {
-                let params = {};
-                params.page=1;
-                params.row=5;
-
-                api.refreshCouponList(params)
-                    .then(res => {
-                        if (res.status == 200) {
-                            console.log(res.data);
-
-                        }
-                    })
-                    .catch(error => {
-
-                    });
-            },
             submitForm:function () {
 				let loginData = new URLSearchParams();
 				let returnUrl = window.location.href;
                 loginData.append('username',this.userName)
-                loginData.append('password',this.myPassword)
-                console.log(loginData);
+				loginData.append('password',this.myPassword)
+				let returnUrl=window.location.href;
+                console.log(returnUrl);
                 api.submitLogin(loginData)
 					.then(res=>{
                         console.log(res);
                         if(res.code == 1){
-                            if(this.register=="register"){
-                                this.$router.push({path: "/index", query: {returnUrl: returnUrl}});
-                            }else{
-                                this.$router.back(-1)
-                            }
-
-                            this.active = true;
+						    	this.active = true;
+							    this.$router.push({path: "/index", query: {returnUrl: returnUrl}});
 						}else if(res.code == 0){
 
                         }

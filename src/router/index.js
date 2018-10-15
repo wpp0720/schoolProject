@@ -97,6 +97,7 @@ export default new Router({
             name: 'addSite',
             component: addSite
         },
+
         {
             path: '/',
             name: 'myLogin',
