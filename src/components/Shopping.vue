@@ -20,13 +20,13 @@
     <div class="list">
       <mt-loadmore :top-method="loadTop"  ref="loadmore">
 
-      <router-link tag="div"  :to="{path:'/proDetails',query:{id:item.ItemID}}" class="shop-row" v-for="item in shopData.Data" >
+      <router-link tag="div"  :to="{path:'/proDetails',query:{id:item.productId}}" class="shop-row" v-for="item in shopData" >
         <div class="top">
-          <div class="shop-img" :style="getBackground(item.Image)"></div>
-          <div class="shop-base-info-wrap">{{item.Name}}</div>
+          <div class="shop-img" :style="getBackground('//cdn01.xiaogj.com/file/mall/default/goods.png')"></div>
+          <div class="shop-base-info-wrap">{{item.productName}}</div>
         </div>
         <div class="bottom">
-          <div class="price">¥{{(item.Money).toFixed(2)}}</div>
+          <div class="price">¥{{(item.salePrice)}}</div>
         </div>
       </router-link>
       </mt-loadmore>
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+  import { api } from "../../static/js/request-api/request-api.js";
   import Vue from "vue";
   import shopData from "./shopData.json";
   import { Loadmore } from 'mint-ui';
@@ -50,8 +51,14 @@
         sortList: [
           {name: '材料'}, {name: "芭蕾舞鞋"}
         ],
-        shopData: shopData
+        shopData: []
       }
+    },
+    mounted() {
+      //获取商品分类
+      this.refreshProductCategory();
+      //获取商品列表
+      this.refreshProduct();
     },
     methods: {
       toggleNav: function () {
@@ -66,6 +73,60 @@
       getBackground:function(name){
         return "background-image:url("+name+")";
       },
+      //获取商品分类
+      refreshProductCategory: function() {
+      let params ={};
+      let _self = this;
+      params.page=1;
+      params.rows=10;
+      api.refreshProductCategory(params)
+        .then(res => {
+          if (res.status == 200) {
+             let code=res.data.code;
+             if(code==1){
+               let result=res.data.data;
+               _self.sortList=result.rows;
+              //  console.log(result);
+             }
+          } else {
+            let params = { msg: "获取商品分类错误" };
+            // GlobalVue.$emit("alert", params);
+            // GlobalVue.$emit("blackBg", null);
+          }
+        })
+        .catch(error => {
+          let params = { msg: "获取商品分类错误" };
+          // GlobalVue.$emit("alert", params);
+          // GlobalVue.$emit("blackBg", null);
+        });
+    },
+     //获取商品列表
+      refreshProduct: function() {
+      let params ={};
+      let _self = this;
+      params.page=1;
+      params.rows=10;
+      api.refreshProduct(params)
+        .then(res => {
+          if (res.status == 200) {
+             let code=res.data.code;
+             if(code==1){
+               let result=res.data.data;
+               _self.shopData=result.rows;
+              //  console.log(result);
+             }
+          } else {
+            let params = { msg: "获取商品列表错误" };
+            // GlobalVue.$emit("alert", params);
+            // GlobalVue.$emit("blackBg", null);
+          }
+        })
+        .catch(error => {
+          let params = { msg: "获取商品列表错误" };
+          // GlobalVue.$emit("alert", params);
+          // GlobalVue.$emit("blackBg", null);
+        });
+    },
       loadTop:function(){
         this.$refs.loadmore.onTopLoaded();
       }

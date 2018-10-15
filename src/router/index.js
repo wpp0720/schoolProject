@@ -3,9 +3,12 @@ import Router from 'vue-router'
 import Index from '@/components/index'
 import topTeacher from '@/components/topTeacher'
 import school from '@/components/school'
+import shopping from '@/components/shopping'
 import contactUS from '@/components/contactUS'
 import teacherTeam from '@/components/teacherTeam'
 import curriculaVariable from '@/components/curriculaVariable'
+import proDetails from '@/components/proDetails'
+import shopCart from '@/components/shopCart'
 
 
 import PersonalIndex from '@/components/personal/PersonalIndex'
@@ -46,6 +49,21 @@ export default new Router({
             path: '/school',
             name: 'school',
             component: school
+        },
+        {
+            path: '/shopCart',
+            name: 'shopCart',
+            component: shopCart
+        },
+        {
+            path: '/proDetails',
+            name: 'proDetails',
+            component: proDetails
+        },
+        {
+            path: '/shopping',
+            name: 'shopping',
+            component: shopping
         },
         {
             path: '/contactUS',

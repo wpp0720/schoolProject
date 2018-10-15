@@ -70,6 +70,7 @@
 
 <script>
   import Vue from "vue";
+  import { api } from "../../static/js/request-api/request-api.js";
   let list = [
     {
       title:"澧县一中校区",
@@ -132,6 +133,10 @@
         return num;
       }
     },
+    mounted() {
+      //获取购物车列表
+      this.refreshShoppingCartList();
+    },
     methods: {
       getBackground:function(name){
         return "background-image:url("+name+")";
@@ -148,6 +153,26 @@
           this.list[index].data[index1].purchaseQuantity--;
         }
       },
+      refreshShoppingCartList: function() {
+      let params ={};
+      let _self = this;
+      api.refreshShoppingCartList(null)
+        .then(res => {
+          console.log(res);
+          if (res.status == 200) {
+          
+          } else {
+            let params = { msg: "获取购物车列表错误" };
+            // GlobalVue.$emit("alert", params);
+            // GlobalVue.$emit("blackBg", null);
+          }
+        })
+        .catch(error => {
+          let params = { msg: "获取购物车列表错误" };
+          // GlobalVue.$emit("alert", params);
+          // GlobalVue.$emit("blackBg", null);
+        });
+    },
       checkAll: function (event) {
         if (event.checked) {
           for (let i = 0; i < this.checkeds.length; i++) {

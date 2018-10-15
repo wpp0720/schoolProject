@@ -15,19 +15,19 @@
             <div class="heard-banner">
               <div class="slider banner">
                 <div class="slider-group" style="width: 750px;"><a class="banner-item slider-item"
-                                                                   style="background-image: url(&quot;//cdn01.xiaogj.com/file/mall/default/goods.png&quot;); width: 750px;"></a>
+                                                              style="background-image: url(&quot;//cdn01.xiaogj.com/file/mall/default/goods.png&quot;); width: 750px;"></a>
                 </div>
                 <div class="dots"></div>
               </div>
             </div>
           </div>
           <div class="title">
-            <div class="class-name">芭蕾舞鞋</div>
+            <div class="class-name">{{productObj.productName}}</div>
             <div class="descrite"></div>
-            <div class="price-bar"><span>¥35.00</span>
+            <div class="price-bar"><span>¥{{productObj.salePrice}}</span>
             </div>
             <div class="old-price">
-              价格<span class="priceold">¥40.00</span></div>
+              价格<span class="priceold">¥{{productObj.purchasePrice}}</span></div>
           </div> <!---->
           <div class="seat"><span
             class="seat-title">商品规格</span>
@@ -72,7 +72,7 @@
         </svg>
       </div>
       <div class="click-wrapper" >
-        <div class="sign-up" v-show="ask" @click="AddGoods()" >
+        <div class="sign-up" v-show="ask" @click="addProductToCart()" >
           加入购物车
         </div>
         <!--<div class="sign-up" style="display: none;">-->
@@ -85,26 +85,35 @@
 
       </div>
     </div>
+      <attentionSuccess v-if="showAttentionAlert" v-bind:attentionText="attentionText"  style="z-index:600;"></attentionSuccess>
   </div>
 </template>
 
 <script>
+  import { api } from "../../static/js/request-api/request-api.js";
+  import attentionSuccess from "@/components/assets/alertSuccess";
   import Vue from "vue";
   import {Navbar, TabItem} from 'mint-ui';
   import BScroll from 'better-scroll';
   import shopData from "./shopData.json";
-  import {proDetailApi} from '../service/api';
+  // import {proDetailApi} from '../service/api';
   import { MessageBox } from 'mint-ui';
   import { Toast } from 'mint-ui';
   Vue.component(Navbar.name, Navbar);
   Vue.component(TabItem.name, TabItem);
   export default {
     name: "ProDetails",
+    components:{
+      attentionSuccess
+    },
     data: function () {
       return {
         selected: "1",
         shopData: shopData,
+        productObj:{},
         ask:true,
+        showAttentionAlert:false,
+        attentionText:"加入购物车成功",
         shoppingcartcount:0//购物车数量
       };
 
@@ -118,6 +127,9 @@
           this.ask=true;
         }
       }
+    },
+    mounted() {
+       this.getProductDetail();
     },
     created() {
       // 初始化 better-scroll 必须要等 dom 加载完毕
@@ -133,19 +145,56 @@
           click: true
         })
       },
-      async AddGoods(){
-        proDetailApi.AddGoods({a:1}).then(function (res) {
-          if(res.data.ErrorCode == 400){
-            MessageBox('提示', res.data.ErrorMsg);
-          }else  if(res.data.ErrorCode == 200){
-            this.shoppingcartcount = res.data.Data;
-            Toast({
-              message: '操作成功',
-              iconClass: 'icon icon-success'
-            });
+    //获取商品明细
+    getProductDetail: function() {
+      let params ={};
+      let _self = this;
+      params.product_id=_self.$route.query.id;;
+      api.getProductDetail(params)
+        .then(res => {
+          if (res.status == 200) {
+             let code=res.data.code;
+             if(code==1){
+               let result=res.data.data;
+               _self.productObj=result;
+             }
+          } else {
+            let params = { msg: "获取商品明细错误" };
+            // GlobalVue.$emit("alert", params);
+            // GlobalVue.$emit("blackBg", null);
           }
         })
-      }
+        .catch(error => {
+          let params = { msg: "获取商品明细错误" };
+          // GlobalVue.$emit("alert", params);
+          // GlobalVue.$emit("blackBg", null);
+        });
+    },
+    //购物车增加
+    addProductToCart: function() {
+      let params ={};
+      let _self = this;
+      params.product_id=_self.$route.query.id;;
+      api.addProductToCart(params)
+        .then(res => {
+          if (res.status == 200) {
+             let code=res.data.code;
+             if(code==1){
+               let result=res.data.data;
+               console.log(result);
+             }
+          } else {
+            let params = { msg: "加入购物车错误" };
+            // GlobalVue.$emit("alert", params);
+            // GlobalVue.$emit("blackBg", null);
+          }
+        })
+        .catch(error => {
+          let params = { msg: "加入购物车错误" };
+          // GlobalVue.$emit("alert", params);
+          // GlobalVue.$emit("blackBg", null);
+        });
+    }
     }
 
   }
@@ -248,6 +297,15 @@
         text-align: center;
         font-size: 40px;
         position: relative;
+      }
+      .shop-car{
+           background-image: url(../../static/img/shopping-cart.png);
+      }
+      .collect{
+         background-image: url(../../static/img/like67.png);
+         background-size:50px 50px;
+         background-repeat:no-repeat;
+         background-position:center; 
       }
       .collect:after, .not-sell:after, .shop-car:after {
         display: block;
@@ -487,7 +545,7 @@
               .empty-img{
                 width: 200px;
                 height: 270px;
-                background-image: url(../assets/kong.png);
+                background-image: url(../assets/img/coupon.png);
                 background-repeat: no-repeat;
                 background-attachment: scroll;
                 background-position: 50%;
