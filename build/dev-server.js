@@ -18,7 +18,7 @@ var webpackConfig = process.env.NODE_ENV === 'testing'
 //修改默认端口
 // var port = process.env.PORT || config.dev.port
 
-var port =8080
+var port =80
 // automatically open browser, if not set will be false
 var autoOpenBrowser = !!config.dev.autoOpenBrowser
 // Define HTTP proxies to your custom API backend
