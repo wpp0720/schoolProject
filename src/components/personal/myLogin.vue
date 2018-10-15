@@ -68,13 +68,15 @@
             submitForm:function () {
 				let loginData = new URLSearchParams();
                 loginData.append('username',this.userName)
-                loginData.append('password',this.myPassword)
-                console.log(loginData);
+				loginData.append('password',this.myPassword)
+				let returnUrl=window.location.href;
+                console.log(returnUrl);
                 api.submitLogin(loginData)
 					.then(res=>{
                         console.log(res);
                         if(res.code == 1){
-                            this.active = true;
+						    	this.active = true;
+							    this.$router.push({path: "/index", query: {returnUrl: returnUrl}});
 						}else if(res.code == 0){
 
                         }

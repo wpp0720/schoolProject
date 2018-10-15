@@ -32,7 +32,7 @@ export default new Router({
         //   name: 'beginAuction',
         //   component: beginAuction
         // },
-        /*{
+        {
             path: '/index',
             name: 'index',
             component: Index
@@ -96,7 +96,7 @@ export default new Router({
             path: '/addSite',
             name: 'addSite',
             component: addSite
-        },*/
+        },
 
         {
             path: '/',
