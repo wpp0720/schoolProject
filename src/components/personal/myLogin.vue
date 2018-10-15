@@ -20,7 +20,7 @@
 				<div class="logBut" @click="submitForm" v-bind:class="{ active: false}">登录</div>
 				<div class="noRegister">
 					您还没有注册?
-					<router-link to="/myRegister" tag="a">注册</router-link>
+					<router-link to="{name:myRegister}" tag="a">注册</router-link>
 				</div>
 			</div>
 	
@@ -38,35 +38,21 @@
                 userName:"",
                 myPassword:'',
                 register:'',
-                active:false
+                active:false,
+                myRegister:''
 			}
 		},
         created(){
-            this.register=this.$route.query.register
-            console.log(this.register)
+
         },
         mounted:function () {
-		    this.getCouponList();
+            this.register=this.$route.query.myRegister
+            console.log(this.register)
         },
         methods:{
-            getCouponList: function(catId, event) {
-                let params = {};
-                params.page=1;
-                params.row=5;
-
-                api.refreshCouponList(params)
-                    .then(res => {
-                        if (res.status == 200) {
-                            console.log(res.data);
-
-                        }
-                    })
-                    .catch(error => {
-
-                    });
-            },
             submitForm:function () {
 				let loginData = new URLSearchParams();
+				let returnUrl = window.location.href;
                 loginData.append('username',this.userName)
 				loginData.append('password',this.myPassword)
 				let returnUrl=window.location.href;
