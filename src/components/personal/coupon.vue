@@ -31,32 +31,55 @@
 </template>
  
 <script>
-export default { 
+import {api} from  '../../../static/js/request-api/request-api.js';
+export default {
   data() {
     return {
-      selected: '1',
-			defaultImg:require('../../assets/img/coupon.png')
+      couponList:{},
+      selected: "1",
+      defaultImg: require("../../assets/img/coupon.png")
     };
+  },
+  mounted: function() {
+    this.getCouponList();
+  },
+  methods: {
+    getCouponList: function() {
+      let params = {};
+      params.page = 1;
+      params.row = 5;
+
+      api
+        .refreshCouponList(params)
+        .then(res => {
+          if (res.status == 200) {
+            couponList = res.body;
+
+            console.log(couponList);
+          }
+        })
+        .catch(error => {});
+    },
   }
 };
 </script>
 <style scoped>
 .page-navbar {
-	width:100%;
-	height:100%;
-	background-color: #dfe4e8;
+  width: 100%;
+  height: 100%;
+  background-color: #dfe4e8;
 }
 .page-navbar .mint-tab-item-label {
-	font-size: 1rem;
+  font-size: 1rem;
 }
 
 .page-navbar .default {
-	text-align: center;
-	margin-top: 12rem;
+  text-align: center;
+  margin-top: 12rem;
 }
-.page-navbar .default p{
-	font-size: 1.5rem;
-    color: #7993ad;
-    margin-top: 2rem;
+.page-navbar .default p {
+  font-size: 1.5rem;
+  color: #7993ad;
+  margin-top: 2rem;
 }
 </style>

@@ -25,13 +25,14 @@
 			</div>
 	
 		</div>
-        <div class="errorMes">用户名或密码错误</div>
+        <!--<div v-bind:class="{ errorMes: false}">用户名或密码错误</div>-->
 		
 	</div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 	import {api} from  '../../../static/js/request-api/request-api.js';
+	import { Toast } from 'mint-ui';
 	export default {
 		data () {
 			return {
@@ -39,7 +40,8 @@
                 myPassword:'',
                 register:'',
                 active:false,
-                myRegister:''
+                myRegister:'',
+				errorMes:false
 			}
 		},
         created(){
@@ -52,17 +54,24 @@
         methods:{
             submitForm:function () {
 				let loginData = new URLSearchParams();
-				let returnUrl = window.location.href;
                 loginData.append('username',this.userName)
 				loginData.append('password',this.myPassword)
+				// let returnUrl=window.location.href;
                 console.log(returnUrl);
                 api.submitLogin(loginData)
 					.then(res=>{
                         console.log(res);
                         if(res.code == 1){
 						    	this.active = true;
-							    this.$router.push({path: "/index", query: {returnUrl: returnUrl}});
+							    this.$router.push({path: "/coupon"});
 						}else if(res.code == 0){
+							alert('用户名或密码错误');
+							// Toast({
+							// 	message: '用户名或密码错误',
+							// 	position: 'bottom',
+							// 	duration: 3000,
+							// 	className:'errorMes'
+							// 	});
 
                         }
 				},()=>{
@@ -74,6 +83,11 @@
 </script>
 
 <style scoped>
+	.errorMes {
+		width: 7rem;
+		height: 3rem;
+		background:red;
+	}
 	.myLogin {
 		width: 100%;
 		height: 100%;
