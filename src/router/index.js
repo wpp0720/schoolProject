@@ -151,7 +151,7 @@ export default new Router({
             path:'/Test/',
             name:'Test',
             component:Test
-          }
+          },
         /*{
             path: '/modifyPass',
             name: 'modifyPass',
@@ -161,7 +161,7 @@ export default new Router({
             path: '/myRegister',
             name: 'myRegister',
             component: myRegister
-        },
+        },*/
         {
             path: '/coupon',
             name: 'coupon',
