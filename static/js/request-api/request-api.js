@@ -8,6 +8,10 @@ export   const  api={
     submitLogin(params){
         return fetchPost(baseUrl+'/user/login',params)
     },
+    // 退出登录
+    loginOut(params){
+        return fetchGet(baseUrl+'/user/loginOut',params)
+    },
     //获取和用户相关的优惠券信息
     refreshCouponList(params){
          return fetchGet(baseUrl+'/product/refreshCouponList',params);

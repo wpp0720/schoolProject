@@ -11,20 +11,34 @@
 			<!--<mt-cell title="收货地址" to="" is-link value=""></mt-cell>-->
 			<mt-cell title="修改密码" to="" is-link value=""></mt-cell>
 			
-			<div class="quit">退出登录</div>
+			<div class="quit" @click="loginOut()">退出登录</div>
 		</div>
 		
 	</div>
 </template>
 
 <script>
-
+import {api} from  '../../../static/js/request-api/request-api.js';
 export default {
 	data () {
 		return {
 		    img:require('../../assets/img/photo.jpeg'),
 		}
-	}
+	},
+	 methods:{
+		submitForm:function () {
+			let _self = this;
+			api.loginOut(loginData)
+					.then(res=>{
+						if(res.code == 1){
+							_self.$router.push({path: "/index"});
+						}
+					},()=>{
+				alert('退出登录失败');
+			});
+
+		}
+	 }
 }
 	
 </script>
