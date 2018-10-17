@@ -12,6 +12,10 @@ export   const  api={
     loginOut(params){
         return fetchGet(baseUrl+'/user/loginOut',params)
     },
+    // 获取登录用户信息
+    getUserInfo(params){
+        return fetchGet(baseUrl+'/user/getUserInfo',params)
+    },
     //获取和用户相关的优惠券信息
     refreshCouponList(params){
          return fetchGet(baseUrl+'/product/refreshCouponList',params);

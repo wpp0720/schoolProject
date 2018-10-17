@@ -44,6 +44,7 @@ export default {
   },
   mounted: function() {
     this.getCouponList();
+    this.getUserInfo();
   },
   methods: {
     getCouponList: function() {
@@ -67,6 +68,18 @@ export default {
           }
         })
         .catch(error => {});
+    },
+    getUserInfo: function() {
+      // let params = {};
+      let _self = this;
+      api.getUserInfo()
+        .then(res => {
+          if (res.status == 200) {
+              console.log(res);
+             }
+          },()=>{
+					
+				});
     },
   }
 };
