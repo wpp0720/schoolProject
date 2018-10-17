@@ -55,14 +55,14 @@
 				let returnUrl = window.location.href;
                 loginData.append('username',this.userName)
 				loginData.append('password',this.myPassword)
-				let returnUrl=window.location.href;
-                console.log(returnUrl);
+				//let returnUrl=window.location.href;
+                //console.log(loginData);
                 api.submitLogin(loginData)
 					.then(res=>{
-                        console.log(res);
+                        //console.log(res);
                         if(res.code == 1){
 						    	this.active = true;
-							    this.$router.push({path: "/index", query: {returnUrl: returnUrl}});
+							    this.$router.push({path: "/myOrder"});
 						}else if(res.code == 0){
 
                         }

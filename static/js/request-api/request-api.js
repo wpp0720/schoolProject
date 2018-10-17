@@ -12,14 +12,25 @@ export   const  api={
     refreshCouponList(params){
          return fetchGet(baseUrl+'/product/refreshCouponList',params);
     },
+    //增加优惠券
+    addCouponForStudent(params){
+        return fetchGet(baseUrl+'/cart/addCouponForStudent',params)
+    },
+
+
     //获取订单列表
     refreshSaleOrderList(params){
         return fetchGet(baseUrl+'/product/refreshSaleOrderList',params);
     },
+    //取消订单
+    cancelSaleOrder(params){
+        return fetchGet(baseUrl+'/product/cancelSaleOrder',params);
+    },
     //清空购物车
     clearProductToCart(params){
         return fetchGet(baseUrl+'/cart/clearProductToCart',params)
-    }
+    },
+    
 
 
    

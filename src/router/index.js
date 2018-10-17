@@ -112,11 +112,11 @@ export default new Router({
             path: '/myRegister',
             name: 'myRegister',
             component: myRegister
-        },
+        },*/
         {
             path: '/coupon',
             name: 'coupon',
             component: coupon
-        }*/
+        }
     ]
 });
