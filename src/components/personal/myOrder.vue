@@ -11,31 +11,31 @@
     <mt-tab-container v-model="selected">
       <mt-tab-container-item id="1">
 		
-		<div class="item" v-for="data in datas.rows">
+		<div class="item" v-for="data in datas">
 			<router-link to="/orderDetails">
         	<div class="top">
         		<div class="left">{{data.campusName}}</div>
         		<div  class="right">交易过期</div>
         	</div>
-        	<div class="middle">
+        	<div class="middle" v-for="item in data.orderDetail">
         		<div class="left">
         			<img :src="defaultImg"/>
         		</div>
         		<div class="center">
-        			<p>故事书2 DVD</p>
-        			<p>￥{{data.realMoney}}</p>
+        			<p>{{item.productName}}</p>
+        			<p>￥{{item.realMoney}}</p>
         		</div>
         		<div class="right">
-        			<span>x1</span>
+        			<span>x{{item.productCount}}</span>
         		</div>
         	</div>
 			</router-link>
         	<div class="bottom">
         		<span>共1件商品</span>
-        		<span>合计：<strong>￥15</strong></span>
+        		<span>合计：<strong>￥{{data.standardMoney}}</strong></span>
         		<span @click="removeOrder()">关闭订单</span>
         	</div>
-        </div>
+      </div>
 
       </mt-tab-container-item>
       <mt-tab-container-item id="2">
@@ -68,45 +68,54 @@ export default {
       selected: "1",
       img: require("../../assets/img/payment.png"),
       defaultImg: require("../../assets/img/goodsPhoto.png"),
-      datas: {}
+      datas: []
     };
   },
   mounted: function() {
-    this.getOrderList();
+    this.getOrderListAndDetailList();
   },
   methods: {
-    getOrderList: function() {
-      let that = this;
+    getOrderListAndDetailList: function() {
+      var that = this;
       let params = {};
       params.page = 1;
       params.row = 5;
 
       api
-        .refreshSaleOrderList(params)
+        .refreshSaleOrderAndDetailList(params)
         .then(res => {
           if (res.status == 200) {
-            console.log(res.data);
-            that.datas = res.data.data;
+            var data = res.data.data.rows;
+            console.log(data.length);
+            data.forEach(element => {
+              if (element.orderDetail.length > 1) {
+                that.datas.push(element);
+              }
+            });
+            /*for(var i=0;i<data.length;i++){
+              if(data[i].orderDetail.length>1){
+                  that.datas.push(data[i]);
+              }
+            }*/
             console.log(that.datas);
           }
         })
         .catch(error => {});
-	},
-	removeOrder: function(){
-		let that = this;
-		let params = {};
-		params.orderid = 40;
-		api
-			.cancelSaleOrder(params)
-			.then(res => {
-				if (res.status == 200) {
-				console.log(res.data);
-				that.datas = res.data.data;
-				console.log(that.datas);
-			}
-			})
-			.catch(error => {});
-	}
+    },
+    removeOrder: function() {
+      let params = {};
+      params.orderid = 40;
+      api
+        .cancelSaleOrder(params)
+        .then(res => {
+          if (res.status == 200) {
+            //console.log(res.data);
+            //this.datas = res.data.data;
+            //console.log(this.datas);
+          }
+        })
+        .catch(error => {});
+    }
   }
 };
 </script>
@@ -190,5 +199,8 @@ export default {
   font-size: 1.5rem;
   color: #7993ad;
   margin-top: 2rem;
+}
+.page-part .mint-tab-item-label {
+  font-size: 1.2rem !important;
 }
 </style>

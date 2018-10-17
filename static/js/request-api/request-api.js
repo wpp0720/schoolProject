@@ -21,6 +21,11 @@ export   const  api={
         return fetchGet(baseUrl+'/cart/addCouponForStudent',params)
     },
 
+    //获取订单列表加and
+    refreshSaleOrderAndDetailList(params){
+        return fetchGet(baseUrl+"/product/refreshSaleOrderAndDetailList",params)
+    },
+
 
     //获取订单列表
     refreshSaleOrderList(params){
