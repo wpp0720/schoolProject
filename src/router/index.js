@@ -20,6 +20,12 @@ import modifyPass from '@/components/personal/modifyPass'
 import myRegister from '@/components/personal/myRegister'
 
 import coupon from '@/components/personal/coupon'
+import Hello from '@/components/Hello'
+import Shopping from '@/components/Shopping'
+import ProDetails from '@/components/ProDetails'
+import FillOrder from '@/components/FillOrder'
+import ShopCart from '@/components/ShopCart'
+import Test from '@/components/Test'
 
 
 Vue.use(Router)
@@ -103,6 +109,31 @@ export default new Router({
             name: 'myLogin',
             component: myLogin
         },
+        {
+            path: '/index/:id',
+            name: 'Hello',
+            component: Hello
+          },{
+           path:'/shopping/',
+           name:'Shopping',
+            component:Shopping
+          },{
+            path:'/proDetails/',
+            name:'proDetails',
+            component:ProDetails
+          },{
+            path:'/FillOrder/',
+            name:'FillOrder',
+            component:FillOrder
+          },{
+            path:'/ShopCart/',
+            name:'ShopCart',
+            component:ShopCart
+          },{
+            path:'/Test/',
+            name:'Test',
+            component:Test
+          }
         /*{
             path: '/modifyPass',
             name: 'modifyPass',
