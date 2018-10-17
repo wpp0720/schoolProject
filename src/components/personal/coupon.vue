@@ -36,6 +36,7 @@ import {api} from  '../../../static/js/request-api/request-api.js';
 export default {
   data() {
     return {
+
       couponData:[],
       selected: "1",
       defaultImg: require("../../assets/img/coupon.png")
@@ -48,6 +49,7 @@ export default {
   methods: {
     getCouponList: function() {
       let params = {};
+
       let _self = this;
       params.page = 1;
       params.row = 5;
