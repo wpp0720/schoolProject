@@ -25,7 +25,10 @@ export   const  api={
     refreshSaleOrderAndDetailList(params){
         return fetchGet(baseUrl+"/product/refreshSaleOrderAndDetailList",params)
     },
-
+    //获取订单明细refreshSaleOrderDetailList
+    refreshSaleOrderDetailList(params){
+        return fetchGet(baseUrl+"/product/refreshSaleOrderDetailList",params)
+    },
 
     //获取订单列表
     refreshSaleOrderList(params){

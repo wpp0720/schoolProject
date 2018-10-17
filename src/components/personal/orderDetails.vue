@@ -39,11 +39,31 @@
 </template>
  
 <script>
+import { api } from "../../../static/js/request-api/request-api.js";
 export default { 
   data() {
     return {
-		defaultImg:require('../../assets/img/goodsPhoto.png')
+		defaultImg:require('../../assets/img/goodsPhoto.png'),
+		datas: []
     };
+  },
+  mounted:function(){
+	  this.getOrderDetailList();
+  },
+  methods:{
+	getOrderDetailList:function() {
+		let that = this;
+		let params = {};
+		params.order_id  = 53;
+		api.
+			refreshSaleOrderDetailList(params)
+			.then(res => {
+				if(res.status == 200){
+					var data = res.data;
+					console.log(data);
+				}
+			})
+	}
   }
 };
 </script>

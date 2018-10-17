@@ -11,8 +11,8 @@
     <mt-tab-container v-model="selected">
       <mt-tab-container-item id="1">
 		
-		<div class="item" v-for="data in datas">
-			<router-link to="/orderDetails">
+		<div class="item" v-for="data in datas"  v-if="datas.length>0">
+      <router-link :to="{path:'/orderDetails',query: {name: data.id}}">
         	<div class="top">
         		<div class="left">{{data.campusName}}</div>
         		<div  class="right">交易过期</div>
@@ -36,6 +36,10 @@
         		<span @click="removeOrder()">关闭订单</span>
         	</div>
       </div>
+      <div class="default" v-if="datas.length==0" >
+					<img :src="img"/>
+					<p>您的订单空空如也~</p>
+				</div>
 
       </mt-tab-container-item>
       <mt-tab-container-item id="2">
@@ -76,7 +80,7 @@ export default {
   },
   methods: {
     getOrderListAndDetailList: function() {
-      var that = this;
+      let that = this;
       let params = {};
       params.page = 1;
       params.row = 5;
