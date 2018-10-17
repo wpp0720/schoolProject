@@ -9,10 +9,11 @@
 	<!-- tabcontainer -->
     <mt-tab-container v-model="selected">
       <mt-tab-container-item id="1">
-		<div class="default">
-					<img :src="defaultImg"/>
-					<p>您的订单空空如也~</p>
-				</div>
+        
+          <div class="default">
+            <img :src="defaultImg"/>
+            <p>您的订单空空如也~</p>
+          </div>
       </mt-tab-container-item>
       <mt-tab-container-item id="2">
         <div class="default">
@@ -35,6 +36,8 @@ import {api} from  '../../../static/js/request-api/request-api.js';
 export default {
   data() {
     return {
+
+      couponData:[],
       selected: "1",
       defaultImg: require("../../assets/img/coupon.png")
     };
@@ -45,14 +48,22 @@ export default {
   methods: {
     getCouponList: function() {
       let params = {};
+
+      let _self = this;
       params.page = 1;
       params.row = 5;
 
-      api
-        .refreshCouponList(params)
+      api.refreshCouponList(params)
         .then(res => {
           if (res.status == 200) {
-            console.log(res.data);
+            let code=res.data.code;
+             if(code==1){
+               let result=res.data.data;
+               _self.couponData=result.rows;
+              console.log(result);
+             }
+
+            // couponList = res.data.data.rows;
           }
         })
         .catch(error => {});

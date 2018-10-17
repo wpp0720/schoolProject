@@ -8,6 +8,10 @@ export   const  api={
     submitLogin(params){
         return fetchPost(baseUrl+'/user/login',params)
     },
+    // 退出登录
+    loginOut(params){
+        return fetchGet(baseUrl+'/user/loginOut',params)
+    },
     //获取和用户相关的优惠券信息
     refreshCouponList(params){
          return fetchGet(baseUrl+'/product/refreshCouponList',params);
@@ -30,7 +34,28 @@ export   const  api={
     clearProductToCart(params){
         return fetchGet(baseUrl+'/cart/clearProductToCart',params)
     },
+    //获取商品分类
+    refreshProductCategory(params){
+        return fetchGet(baseUrl+"/product/refreshProductCategory",params)
+    },
+    //获取商品列表
+    refreshProduct(params){
+        return fetchGet(baseUrl+"/product/refreshProduct",params)
+    },
+    //获取商品明细
+    getProductDetail(params){
+        return fetchGet(baseUrl+"/product/getProductDetail",params)
+    },
+    //加入购物车
+    addProductToCart(params){
+       return fetchGet(baseUrl+"/cart/addProductToCart",params)
+        },
     
+     //获取购物车列表
+     refreshShoppingCartList(params){
+        return fetchGet(baseUrl+"/cart/refreshShoppingCartList",params)
+    }
+
 
 
    

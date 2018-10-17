@@ -3,9 +3,12 @@ import Router from 'vue-router'
 import Index from '@/components/index'
 import topTeacher from '@/components/topTeacher'
 import school from '@/components/school'
+import shopping from '@/components/shopping'
 import contactUS from '@/components/contactUS'
 import teacherTeam from '@/components/teacherTeam'
 import curriculaVariable from '@/components/curriculaVariable'
+import proDetails from '@/components/proDetails'
+import shopCart from '@/components/shopCart'
 
 
 import PersonalIndex from '@/components/personal/PersonalIndex'
@@ -20,6 +23,12 @@ import modifyPass from '@/components/personal/modifyPass'
 import myRegister from '@/components/personal/myRegister'
 
 import coupon from '@/components/personal/coupon'
+import Hello from '@/components/Hello'
+import Shopping from '@/components/Shopping'
+import ProDetails from '@/components/ProDetails'
+import FillOrder from '@/components/FillOrder'
+import ShopCart from '@/components/ShopCart'
+import Test from '@/components/Test'
 
 
 Vue.use(Router)
@@ -46,6 +55,21 @@ export default new Router({
             path: '/school',
             name: 'school',
             component: school
+        },
+        {
+            path: '/shopCart',
+            name: 'shopCart',
+            component: shopCart
+        },
+        {
+            path: '/proDetails',
+            name: 'proDetails',
+            component: proDetails
+        },
+        {
+            path: '/shopping',
+            name: 'shopping',
+            component: shopping
         },
         {
             path: '/contactUS',
@@ -103,6 +127,31 @@ export default new Router({
             name: 'myLogin',
             component: myLogin
         },
+        {
+            path: '/index/:id',
+            name: 'Hello',
+            component: Hello
+          },{
+           path:'/shopping/',
+           name:'Shopping',
+            component:Shopping
+          },{
+            path:'/proDetails/',
+            name:'proDetails',
+            component:ProDetails
+          },{
+            path:'/FillOrder/',
+            name:'FillOrder',
+            component:FillOrder
+          },{
+            path:'/ShopCart/',
+            name:'ShopCart',
+            component:ShopCart
+          },{
+            path:'/Test/',
+            name:'Test',
+            component:Test
+          },
         /*{
             path: '/modifyPass',
             name: 'modifyPass',
