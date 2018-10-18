@@ -1,69 +1,79 @@
 <template>
 	<div class="modifyPass">
 		<div class="oldPass">
-			<input type="password" placeholder="请输入旧密码" maxlength="20"/>
+			<input type="password" placeholder="请输入旧密码" v-model.trim="formData[0].oripassword" maxlength="20"/>
 		</div>
 		
 		<div class="newPass">
-			<input type="password" placeholder="请输入6位数以上的新密码" v-model.trim="formData[0].password" maxlength="20" @blur="regPasswordReg"/>
+			<input type="password" placeholder="请输入6位数以上的新密码" v-model.trim="formData[1].password" maxlength="20" @blur="regPasswordReg"/>
 			
 		</div>
 		<div class="newPassMore">
-			<input type="password" placeholder="请重新输入新密码" v-model.trim="formData[1].rePassword" maxlength="20" @change="rePasswordReg"/>
+			<input type="password" placeholder="请重新输入新密码" v-model.trim="formData[2].rePassword" maxlength="20" @change="rePasswordReg"/>
 			
 		</div>
 		
-		<div class="pass-warn" v-show="passwordBarText">
-	      	密码为6-20位字母加数字
-	    </div>
-	    
-		<div class="repassword-warn" v-show="repasswordWarn">
-      		两次输入的密码不一样
-    	</div>
-		
-		<p>确定</p>
+		<p @click="rePasswordReg()">确定</p>
 		
 	</div>
 </template>
 
 <script>
+	import {api} from  '../../../static/js/request-api/request-api.js';
+	import { Toast } from 'mint-ui';
 	export default {
 		data () {
 			return {
 				repasswordWarn:false,
 				formData:[
-					{
-		              password:''
-		            },
-		            {
-		              rePassword:''
-		            }
-				],
-				passwordBarText:false,
-	
+					{oripassword:''},
+					{password:''},
+		      {rePassword:''}
+				],	
 			}
 		},
 		methods:{
+			 resetPassword:function () {
+					let _self = this;
+					let loginData = new URLSearchParams();
+        	loginData.append('oldPassword',this.formData[0].oripassword)
+					loginData.append('newPassword',this.formData[2].rePassword)
+        	api.resetPassword(loginData)
+					.then(res=>{
+							if(res.code == 1){
+								// 修改成功
+							}else if(res.code == 0){
+								// alert('用户名或密码错误');
+								let instance = Toast('原始密码不正确');
+								setTimeout(() => {
+									instance.close();
+								}, 1500);
+						}
+					},()=>{					});
+      },
 			//密码校验
-	        regPasswordReg(){
-	          if(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/.test(this.formData[0].password)){
-	            this.passwordBarText = false;
+			regPasswordReg:function (){
+				if(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/.test(this.formData[0].password)){
 
-	          }else{
-	            this.passwordBarText = true;
+				}else{
+					// let instance = Toast('新密码不能少于6个字符');
+					// setTimeout(() => {
+					// 	instance.close();
+					// }, 1500);
+				}
+			},
+			//验证两次密码一致
+			rePasswordReg:function (){
+				if(this.formData[1].password==this.formData[2].rePassword){
+					this.resetPassword();
 
-	          }
-	        },
-	        //验证两次密码一致
-	        rePasswordReg(){
-	          if(this.formData[0].password==this.formData[1].rePassword){
-	            this.repasswordWarn = false;
-	            this.passwordBarText = false;
-	          }else {
-	            this.repasswordWarn = true;
-	            this.passwordBarText = true;
-	          }
-	        },
+				}else {
+					let instance = Toast('您输入的两次密码不相同，请重新输入');
+					setTimeout(() => {
+						instance.close();
+					}, 1500);
+				}
+			},
 		}
 	}
 </script>

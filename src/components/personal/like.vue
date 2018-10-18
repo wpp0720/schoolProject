@@ -1,6 +1,6 @@
 <template>
   <div class="like">
-    <div class="like-top">
+    <!--<div class="like-top">
     	<div>
     		<mt-checklist 
 				v-model="value" 
@@ -9,35 +9,25 @@
     		<span>全选</span>
     	</div>
     	<div><span>编辑</span><span v-show="false">完成</span></div>
-    </div>
+    </div>-->
 	<div class="like-list">
 
-		<div class="item">
-        	<div class="middle">
-        		<div class="left">
-        			<img :src="defaultImg"/>
-        		</div>
-        		<div class="center">
-        			<p>数学教科书</p>
-        		</div>
-        	</div>
-        	<div class="bottom">
-        		<span><strong>￥0.01</strong></span>
-        	</div>
+		<div class="item"  v-for="data in loveData"  v-if="loveData.length>0">
+			<router-link :to="{path:'/proDetails',query: {name: data.productId}}">
+				<div class="middle">
+					<div class="left">
+						<img :src="defaultImg"/>
+					</div>
+					<div class="center">
+						<p>{{data.productName}}</p>
+					</div>
+				</div>
+				<div class="bottom">
+					<span><strong>￥0.01</strong></span>
+				</div>
+			</router-link>
         </div>
-        <div class="item">
-        	<div class="middle">
-        		<div class="left">
-        			<img :src="defaultImg"/>
-        		</div>
-        		<div class="center">
-        			<p>数学教科书</p>
-        		</div>
-        	</div>
-        	<div class="bottom">
-        		<span><strong>￥0.01</strong></span>
-        	</div>
-        </div>
+        
         <div class="item">
         	<div class="middle">
         		<div class="left">
@@ -58,9 +48,11 @@
 </template>
  
 <script>
+	import {api} from  '../../../static/js/request-api/request-api.js';
 export default { 
   data() {
     return {
+		loveData:[],
 			defaultImg:require('../../assets/img/goodsPhoto.png'),
 			value:[],
 			//checklist设置
@@ -85,6 +77,31 @@ export default {
 
 
     };
+  },
+   mounted: function() {
+    this.refreshProductLove();
+  },
+  methods: {
+	refreshProductLove: function() {
+		let params = {};
+		let _self = this;
+		params.page = 1;
+		params.row = 5;
+		api.refreshProductLove(params)
+			.then(res => {
+				if (res.status == 200) {
+					let code=res.data.code;
+					if(code == 1){
+						let result=res.data.data;
+						_self.loveData=result.rows;
+						console.log(result);
+					}
+
+					// couponList = res.data.data.rows;
+				}
+			})
+			.catch(error => {});
+		},
   }
 };
 </script>

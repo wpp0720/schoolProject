@@ -65,7 +65,7 @@
                         //console.log(res);
                         if(res.code == 1){
 						    	this.active = true;
-							    this.$router.push({path: "/myOrder"});
+							    this.$router.push({path: "/like"});
 
 						}else if(res.code == 0){
 							// alert('用户名或密码错误');
