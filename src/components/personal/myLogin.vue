@@ -53,29 +53,36 @@
         },
         methods:{
             submitForm:function () {
+				let _self = this;
 				let loginData = new URLSearchParams();
                 loginData.append('username',this.userName)
 				loginData.append('password',this.myPassword)
+
 				// let returnUrl=window.location.href;
                 // console.log(returnUrl);
                 api.submitLogin(loginData)
 					.then(res=>{
-                        console.log(res);
+                        //console.log(res);
                         if(res.code == 1){
 						    	this.active = true;
-							    this.$router.push({path: "/coupon"});
+							    this.$router.push({path: "/like"});
+
 						}else if(res.code == 0){
-							alert('用户名或密码错误');
-							// Toast({
-							// 	message: '用户名或密码错误',
+							// alert('用户名或密码错误');
+							let instance = Toast('用户名或密码错误');
+							setTimeout(() => {
+								instance.close();
+							}, 1500);
+							// _self.$toast({
+							// 	message: '',
 							// 	position: 'bottom',
 							// 	duration: 3000,
-							// 	className:'errorMes'
+							// 	// className:'errorMes'
 							// 	});
 
                         }
 				},()=>{
-					alert('登录失败');
+					alert('请输入用户名或密码');
 				});
             }
 		}

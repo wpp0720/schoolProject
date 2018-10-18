@@ -8,13 +8,47 @@ export   const  api={
     submitLogin(params){
         return fetchPost(baseUrl+'/user/login',params)
     },
+    // 退出登录
+    loginOut(params){
+        return fetchGet(baseUrl+'/user/loginOut',params)
+    },
+    // 修改密码
+    resetPassword(params){
+        return fetchPost(baseUrl+'/user/resetPassword',params)
+    },
+    // 我的喜欢
+    refreshProductLove(params){
+        return fetchGet(baseUrl+'/product/refreshProductLove',params)
+    },
+    // 获取登录用户信息
+    getUserInfo(params){
+        return fetchGet(baseUrl+'/user/getUserInfo',params)
+    },
     //获取和用户相关的优惠券信息
     refreshCouponList(params){
          return fetchGet(baseUrl+'/product/refreshCouponList',params);
     },
+    //增加优惠券
+    addCouponForStudent(params){
+        return fetchGet(baseUrl+'/cart/addCouponForStudent',params)
+    },
+
+    //获取订单列表加and
+    refreshSaleOrderAndDetailList(params){
+        return fetchGet(baseUrl+"/product/refreshSaleOrderAndDetailList",params)
+    },
+    //获取订单明细refreshSaleOrderDetailList
+    refreshSaleOrderDetailList(params){
+        return fetchGet(baseUrl+"/product/refreshSaleOrderDetailList",params)
+    },
+
     //获取订单列表
     refreshSaleOrderList(params){
         return fetchGet(baseUrl+'/product/refreshSaleOrderList',params);
+    },
+    //取消订单
+    cancelSaleOrder(params){
+        return fetchGet(baseUrl+'/product/cancelSaleOrder',params);
     },
     //清空购物车
     clearProductToCart(params){
@@ -53,8 +87,5 @@ export   const  api={
     insertSaleOrder(params){
         return fetchGet(baseUrl+"/product/insertSaleOrder",params)
     }
-
-
-
    
 }

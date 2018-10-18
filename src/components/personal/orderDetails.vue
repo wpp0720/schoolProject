@@ -5,32 +5,32 @@
 	</div>
     <div class="item">
     	<div class="top">
-    		<div class="left">潮人部落</div>
+    		<div class="left">{{dataMessage.campusName}}</div>
     	</div>
-    	<div class="middle">
+    	<div class="middle" v-for="data in dataArrs">
     		<div class="left">
     			<img :src="defaultImg"/>
     		</div>
     		<div class="center">
-    			<p>故事书2 DVD</p>
-    			<p>￥15.00</p>
+    			<p>{{data.productName}}</p>
+    			<p>￥{{data.realMoney}}</p>
     		</div>
     		<div class="right">
-    			<span>x1</span>
+    			<span>x{{data.productCount}}</span>
     		</div>
     	</div>
     	<div class="bottom">
     		<span>实际支付</span>
-    		<span><strong>￥15</strong></span>
+    		<span><strong>￥{{dataMessage.realMoney}}</strong></span>
     		
     	</div>
     	
     	<mt-cell class="receipt" title="收货信息"></mt-cell>
-    	<mt-cell title="使用学员:" value="张月隆"></mt-cell>
+    	<mt-cell title="使用学员:" >{{dataMessage.studentName}}</mt-cell>
     	
     	<mt-cell class="order" title="订单信息"></mt-cell>
-    	<mt-cell class="orderNumber" title="订单编号:" value="180918191919191991"></mt-cell>
-    	<mt-cell title="下单信息:" value="2018-8-23 23:23:23"></mt-cell>
+    	<mt-cell class="orderNumber" title="订单编号:" value="">{{dataMessage.code}}</mt-cell>
+    	<mt-cell title="下单信息:" value="">{{dataMessage.createTime}}</mt-cell>
     	
     	<div class="close"><span>关闭订单</span></div>
     	
@@ -39,11 +39,80 @@
 </template>
  
 <script>
+import { api } from "../../../static/js/request-api/request-api.js";
 export default { 
   data() {
     return {
-		defaultImg:require('../../assets/img/goodsPhoto.png')
+		defaultImg:require('../../assets/img/goodsPhoto.png'),
+		pageId : 0,
+		dataMessage:{},
+		dataArrs: []
     };
+  },
+  mounted:function(){
+	let currentUrl = window.location.href; //获取当前链接
+	let arr = currentUrl.split("?");//分割域名和参数界限
+	if (arr.length > 1) {
+		this.pageId = arr[1].slice(3,arr[1].length);
+	}
+	this.getOrderDetailList();
+	this.getProductImpage();
+	this.getOrderListAndDetailList();
+  },
+  methods:{
+	  //获取商品图片接口----暂无数据
+	getProductImpage: function() {
+      let that = this;
+      let params = {};
+      params.page = 1;
+	  params.rows = 5;
+	  params.product_id = that.pageId;
+
+      api.refreshProductImpage(params).then(res => {
+        if (res.status == 200) {
+          var data = res.data;
+          //console.log(data);
+        }
+      });
+	},
+	//获取订单明细接口
+	getOrderDetailList:function() {
+		let that = this;
+		let params = {};
+		params.order_id = that.pageId;
+
+		api.
+			refreshSaleOrderDetailList(params)
+			.then(res => {
+				if(res.status == 200){
+					var data = res.data.data.rows;
+					that.dataArrs = data;
+				}
+			})
+	},
+	//获取订单列表和详细信息
+	getOrderListAndDetailList: function() {
+      let that = this;
+      let params = {};
+      params.page = 1;
+      params.row = 5;
+
+      api
+        .refreshSaleOrderAndDetailList(params)
+        .then(res => {
+          if (res.status == 200) {
+            var data = res.data.data.rows;
+			data.forEach(element => {
+				if(element.id == that.pageId){
+					that.dataMessage = element;
+				}
+			});
+			console.log(that.dataMessage);
+            
+          }
+        })
+        .catch(error => {});
+    },
   }
 };
 </script>
