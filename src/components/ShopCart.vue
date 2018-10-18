@@ -14,33 +14,35 @@
           <div class="list-header">
             <span  class="cname">
               <span  class="cname-icon">
-               <input  class="icon" type="checkbox" id="checkA]" v-on:click="checkAll($event.currentTarget)"/><label for="checkA"></label>
+               <!-- <input  class="icon" type="checkbox" id="checkA]" v-on:click="checkAll($event.currentTarget)"/><label for="checkA"></label> -->
               </span>
-             {{item.title}}
+             {{item.productName}}
         	</span>
 
           </div>
           <div class="list-body">
-            <div  class="row"  v-for="(itemList,index1) in item.data">
+            <!-- <div  class="row"  v-for="(itemList,index1) in item.data"> -->
+              <div  class="row">
               <div class="void"></div>
               <div  class="row-hd">
                 <div  class="body-left">
-                  <input class="icon" type="checkbox" :id="'check'+index+index1" name="checkboxs" v-model="checkeds[index]" />
-                  <label :for="'check'+index+index1"></label>
+                  <input class="icon" type="checkbox" :id="'check'+index" name="checkboxs" v-model="checkeds[index]" />
+                  <!-- <input type="checkbox" id="dogs"> -->
+                  <label :for="'check'+index"></label>
                 </div>
                 <div class="body-right">
-                  <span class="goods-img" :style="getBackground(itemList.subimage1Filename)" ></span>
+                  <span class="goods-img" :style="getBackground('//cdn01.xiaogj.com/file/mall/default/goods.png')" ></span>
                   <div  class="goods-info">
-                    <div  class="name">{{itemList.goodsTitle}}</div>
+                    <div  class="name">{{item.productName}}</div>
                     <div class="detail">
-                      <span  class="price">¥{{itemList.unitPrice}}</span>
+                      <span  class="price">¥{{item.price}}</span>
                       <span class="count">
                         <span>
-                          <em v-on:click="minius(index,index1)">-</em>
-                          <input type="number" v-model.number="itemList.purchaseQuantity" />
-                          <em v-on:click="add(index,index1)">+</em>
+                          <em v-on:click="minius(item.productId,index)">-</em>
+                          <input type="number" v-model="item.count" />
+                          <em v-on:click="add(item.productId,index)">+</em>
                         </span>
-                        <span><button v-on:click="del(index,index1)">删除</button></span>
+                        <span><button v-on:click="del(index)">删除</button></span>
                       </span>
                     </div>
                   </div>
@@ -57,7 +59,7 @@
                 合计:<span class="total">￥{{sum.toFixed(2)}}</span>
               </div>
             </div>
-            <div  class="account-wrap-r">
+            <div  class="account-wrap-r" v-on:click="addOrder">
               去结算<span class="num">（{{checkNum}}）</span>
             </div>
           </div>
@@ -90,20 +92,6 @@
         }
       ]
 
-    },
-    {
-      title:"潮人部落",
-      data:[
-        {
-          goodId:3,
-          goodsTitle: "新视野英语教材",							//商品名
-          specifications: "大包",							//商品规格
-          unitPrice: "12",									//商品单价
-          subimage1Filename :"//cdn01.xiaogj.com/file/mall/default/goods.png",		//商品图片名
-          purchaseQuantity: 1								//商品数量
-        }
-      ]
-
     }
   ] //Vue对象
   export default {
@@ -111,15 +99,17 @@
     data() {
       return {
         list: list,
-        checkeds: {}
+        checkeds: {},
+        orderIdArray:[]
       }
     },
     computed: {
       sum: function () {
         let sum = 0;
+        let _self=this;
         for (let i in this.list) {
           if (this.checkeds[i])
-            sum += this.list[i].unitPrice * this.list[i].purchaseQuantity;
+            sum += this.list[i].price * this.list[i].count;
         }
         return sum;
       },
@@ -141,16 +131,18 @@
       getBackground:function(name){
         return "background-image:url("+name+")";
       },
-      del: function (index,index1) {
+      del: function (index) {
         this.list[index].data.splice(index1, 1);
         this.checkeds.splice(index,1); //同时删除对应的选中状态标识
       },
-      add: function (index,index1) {
-        this.list[index].data[index1].purchaseQuantity++;
+      add: function (productId,index) {
+        this.list[index].count++;
+        this.editProductToCart(productId,1);
       },
-      minius: function (index,index1) {
-        if (this.list[index].data[index1].purchaseQuantity > 1) {
-          this.list[index].data[index1].purchaseQuantity--;
+      minius: function (productId,index) {
+        if (this.list[index].count > 1) {
+          this.list[index].count--;
+          this.editProductToCart(productId,-1);
         }
       },
       refreshShoppingCartList: function() {
@@ -160,7 +152,51 @@
         .then(res => {
           console.log(res);
           if (res.status == 200) {
-          
+                let code=res.data.code;
+                if(code===1){
+                  _self.list=res.data.data;
+                }
+          } else {
+            let params = { msg: "获取购物车列表错误" };
+            // GlobalVue.$emit("alert", params);
+            // GlobalVue.$emit("blackBg", null);
+          }
+        })
+        .catch(error => {
+          let params = { msg: "获取购物车列表错误" };
+          // GlobalVue.$emit("alert", params);
+          // GlobalVue.$emit("blackBg", null);
+        });
+    },
+    //提交订单
+    addOrder:function(){
+        this.orderIdArray=[];
+         for (let i in this.list) {
+          if (this.checkeds[i])
+            this.orderIdArray.push(this.list[i]);
+        }
+      let joinAuctionKey = "add_order";
+      let _self = this;
+      // if (!localStorage.getItem(joinAuctionKey)) {
+        localStorage.setItem(joinAuctionKey, JSON.stringify(_self.orderIdArray));
+      // }
+        this.$router.push({path: "/fillOrder"});
+    },
+    //编辑购物车
+     editProductToCart: function(id,count) {
+      let params ={};
+      let _self = this;
+      let data = new URLSearchParams();
+       data.append('product_id',id);
+       data.append('product_count',count)
+      api.editProductToCart(data)
+        .then(res => {
+          console.log(res);
+          if (res.status == 200) {
+                let code=res.data.code;
+                if(code===1){
+                  _self.list=res.data.data;
+                }
           } else {
             let params = { msg: "获取购物车列表错误" };
             // GlobalVue.$emit("alert", params);
@@ -232,12 +268,43 @@
     margin: 0em;
     font-size:28px
   }
+
+input[type="checkbox"]{
+    -webkit-appearance: none;
+    vertical-align:middle;
+    margin-top:0;
+    background:#fff;
+    border:#999 solid 1px;
+    border-radius: 3px;
+    min-height: 12px;
+    min-width: 12px;
+}
+input[type="checkbox"]:checked {
+    background: #3190e8;
+}
+input[type=checkbox]:checked::after{
+    content: '';
+    top: 3px;
+    left: 3px;
+    position: absolute;
+    background: transparent;
+    border: #fff solid 2px;
+    border-top: none;
+    border-right: none;
+    height: 6px;
+    width: 10px;
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg); 
+    transform: rotate(-45deg);
+}
   .icon {
     width: 1em;
     height: 1em;
     vertical-align: -.15em;
     fill: currentColor;
     overflow: hidden;
+    // border: 2px solid #333;
   }
   .cart{
     position: absolute;

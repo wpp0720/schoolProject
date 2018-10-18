@@ -9,6 +9,7 @@ import teacherTeam from '@/components/teacherTeam'
 import curriculaVariable from '@/components/curriculaVariable'
 import proDetails from '@/components/proDetails'
 import shopCart from '@/components/shopCart'
+import fillOrder from '@/components/FillOrder'
 
 
 import PersonalIndex from '@/components/personal/PersonalIndex'
@@ -50,15 +51,23 @@ export default new Router({
             name: 'school',
             component: school
         },
+        //购物车
         {
             path: '/shopCart',
             name: 'shopCart',
             component: shopCart
         },
+        //添加购物车
         {
             path: '/proDetails',
             name: 'proDetails',
             component: proDetails
+        },
+         //添加订单
+         {
+            path: '/fillOrder',
+            name: 'fillOrder',
+            component: fillOrder
         },
         {
             path: '/shopping',

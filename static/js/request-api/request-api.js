@@ -34,12 +34,24 @@ export   const  api={
     },
     //加入购物车
     addProductToCart(params){
-       return fetchGet(baseUrl+"/cart/addProductToCart",params)
+       return fetchPost(baseUrl+"/cart/addProductToCart",params)
         },
     
      //获取购物车列表
      refreshShoppingCartList(params){
         return fetchGet(baseUrl+"/cart/refreshShoppingCartList",params)
+    },
+    //增加购物车数量
+    editProductToCart(params){
+        return fetchPost(baseUrl+"/cart/editProductToCart",params)
+    },
+    //获取用户登录信息
+    getUserInfo(params){
+        return fetchGet(baseUrl+"/user/getUserInfo",params)
+    },
+    //插入订单
+    insertSaleOrder(params){
+        return fetchGet(baseUrl+"/product/insertSaleOrder",params)
     }
 
 

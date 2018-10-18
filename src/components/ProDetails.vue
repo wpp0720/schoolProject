@@ -60,7 +60,7 @@
       </mt-tab-container-item>
     </mt-tab-container>
     <div class="bottom">
-      <div class="shop-car">
+      <div class="shop-car"  @click="shopppingCartList()">
         <div class="circle">{{shoppingcartcount}}</div>
         <svg aria-hidden="true" class="icon">
           <use xlink:href="#icon-gouwuche1"></use>
@@ -95,6 +95,7 @@
   import Vue from "vue";
   import {Navbar, TabItem} from 'mint-ui';
   import BScroll from 'better-scroll';
+  import Router from "vue-router";
   import shopData from "./shopData.json";
   // import {proDetailApi} from '../service/api';
   import { MessageBox } from 'mint-ui';
@@ -130,6 +131,8 @@
     },
     mounted() {
        this.getProductDetail();
+       //获取购物车列表
+       this.refreshShoppingCartList();
     },
     created() {
       // 初始化 better-scroll 必须要等 dom 加载完毕
@@ -145,6 +148,10 @@
           click: true
         })
       },
+      //购物车列表
+    shopppingCartList:function(){
+       this.$router.push({path: "/shopCart"});
+    },
     //获取商品明细
     getProductDetail: function() {
       let params ={};
@@ -170,19 +177,43 @@
           // GlobalVue.$emit("blackBg", null);
         });
     },
-    //购物车增加
-    addProductToCart: function() {
+    //获取购物车列表
+      refreshShoppingCartList: function() {
       let params ={};
       let _self = this;
-      params.product_id=_self.$route.query.id;;
-      api.addProductToCart(params)
+      api.refreshShoppingCartList(null)
         .then(res => {
           if (res.status == 200) {
-             let code=res.data.code;
-             if(code==1){
-               let result=res.data.data;
-               console.log(result);
-             }
+              let code=res.data.code;
+              if(code==1){
+                 let shoppingList=res.data.data;
+                 if(shoppingList&&shoppingList.length>0){
+                   _self.shoppingcartcount=shoppingList.length;
+                 }
+              }
+          } else {
+            let params = { msg: "获取购物车列表错误" };
+            // GlobalVue.$emit("alert", params);
+            // GlobalVue.$emit("blackBg", null);
+          }
+        })
+        .catch(error => {
+          let params = { msg: "获取购物车列表错误" };
+          // GlobalVue.$emit("alert", params);
+          // GlobalVue.$emit("blackBg", null);
+        });
+    },
+    //购物车增加
+    addProductToCart: function() {
+      let _self = this;
+      let data = new URLSearchParams();
+      data.append('product_id',_self.$route.query.id);
+      api.addProductToCart(data)
+        .then(res => {
+            let code=res.code;
+          if (code == 1) {
+            _self.shoppingcartcount=_self.shoppingcartcount+1;
+        
           } else {
             let params = { msg: "加入购物车错误" };
             // GlobalVue.$emit("alert", params);

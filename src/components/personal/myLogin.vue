@@ -57,7 +57,7 @@
                 loginData.append('username',this.userName)
 				loginData.append('password',this.myPassword)
 				// let returnUrl=window.location.href;
-                console.log(returnUrl);
+                // console.log(returnUrl);
                 api.submitLogin(loginData)
 					.then(res=>{
                         console.log(res);
