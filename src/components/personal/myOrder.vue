@@ -9,10 +9,10 @@
     </mt-navbar> 
 	<!-- tabcontainer -->
     <mt-tab-container v-model="selected">
+      <!-- 全部 -->
       <mt-tab-container-item id="1">
-		
 		<div class="item" v-for="data in datas"  v-if="datas.length>0">
-      <router-link :to="{path:'/orderDetails',query: {name: data.id}}">
+      <router-link :to="{path:'/orderDetails',query: {id: data.id}}">
         	<div class="top">
         		<div class="left">{{data.campusName}}</div>
         		<div  class="right">交易过期</div>
@@ -31,8 +31,8 @@
         	</div>
 			</router-link>
         	<div class="bottom">
-        		<span>共1件商品</span>
-        		<span>合计：<strong>￥{{data.standardMoney}}</strong></span>
+        		<span>共{{data.totalProductCount}}件商品</span>
+        		<span>合计：<strong>￥{{data.realMoney}}</strong></span>
         		<span @click="removeOrder()">关闭订单</span>
         	</div>
       </div>
@@ -42,18 +42,75 @@
 				</div>
 
       </mt-tab-container-item>
+
+
+      <!-- 代付款 -->
       <mt-tab-container-item id="2">
-        <div class="default">
+        <div class="item" v-for="data in unpaid"  v-if="unpaid.length>0">
+      <router-link :to="{path:'/orderDetails',query: {id: data.id}}">
+        	<div class="top">
+        		<div class="left">{{data.campusName}}</div>
+        		<div  class="right">交易过期</div>
+        	</div>
+        	<div class="middle" v-for="item in data.orderDetail">
+        		<div class="left">
+        			<img :src="defaultImg"/>
+        		</div>
+        		<div class="center">
+        			<p>{{item.productName}}</p>
+        			<p>￥{{item.realMoney}}</p>
+        		</div>
+        		<div class="right">
+        			<span>x{{item.productCount}}</span>
+        		</div>
+        	</div>
+			</router-link>
+        	<div class="bottom">
+        		<span>共{{data.totalProductCount}}件商品</span>
+        		<span>合计：<strong>￥{{data.realMoney}}</strong></span>
+        		<span @click="removeOrder()">关闭订单</span>
+        	</div>
+      </div>
+        <div class="default" v-if="unpaid.length==0" >
 					<img :src="img"/>
 					<p>您的订单空空如也~</p>
 				</div>
       </mt-tab-container-item>
+
+      <!-- 已付款 -->
       <mt-tab-container-item id="3">
-        <div class="default">
+        <div class="item" v-for="data in alreadyPaid"  v-if="alreadyPaid.length>0">
+      <router-link :to="{path:'/orderDetails',query: {id: data.id}}">
+        	<div class="top">
+        		<div class="left">{{data.campusName}}</div>
+        		<div  class="right">交易过期</div>
+        	</div>
+        	<div class="middle" v-for="item in data.orderDetail">
+        		<div class="left">
+        			<img :src="defaultImg"/>
+        		</div>
+        		<div class="center">
+        			<p>{{item.productName}}</p>
+        			<p>￥{{item.realMoney}}</p>
+        		</div>
+        		<div class="right">
+        			<span>x{{item.productCount}}</span>
+        		</div>
+        	</div>
+			</router-link>
+        	<div class="bottom">
+        		<span>共{{data.totalProductCount}}件商品</span>
+        		<span>合计：<strong>￥{{data.realMoney}}</strong></span>
+        		<span @click="removeOrder()">关闭订单</span>
+        	</div>
+      </div>
+        <div class="default" v-if="alreadyPaid.length==0" >
 					<img :src="img"/>
 					<p>您的订单空空如也~</p>
 				</div>
       </mt-tab-container-item>
+
+       <!-- 待评价 -->
 			<mt-tab-container-item id="4">
         <div class="default">
 					<img :src="img"/>
@@ -72,13 +129,31 @@ export default {
       selected: "1",
       img: require("../../assets/img/payment.png"),
       defaultImg: require("../../assets/img/goodsPhoto.png"),
-      datas: []
+      datas: [],
+      alreadyPaid: [],
+      unpaid:[]
     };
   },
   mounted: function() {
     this.getOrderListAndDetailList();
+    this.getProductImpage();
   },
   methods: {
+    //refreshProductImpage
+    getProductImpage: function() {
+      let that = this;
+      let params = {};
+      params.page = 1;
+      params.product_id = 53;
+      params.rows = 5;
+
+      api.refreshProductImpage(params).then(res => {
+        if (res.status == 200) {
+          var data = res.data;
+          //console.log(data);
+        }
+      });
+    },
     getOrderListAndDetailList: function() {
       let that = this;
       let params = {};
@@ -90,10 +165,17 @@ export default {
         .then(res => {
           if (res.status == 200) {
             var data = res.data.data.rows;
-            console.log(data.length);
+            //console.log(data.length);
             data.forEach(element => {
               if (element.orderDetail.length > 1) {
                 that.datas.push(element);
+              }
+              //payStateId 支付状态 1：未支付，2：部分支付，3：已支付
+              if (element.payStateId == 3 && element.orderDetail.length > 1) {
+                that.alreadyPaid.push(element);
+              }
+              if (element.payStateId == 1 && element.orderDetail.length > 1) {
+                that.unpaid.push(element);
               }
             });
             /*for(var i=0;i<data.length;i++){
@@ -101,7 +183,7 @@ export default {
                   that.datas.push(data[i]);
               }
             }*/
-            console.log(that.datas);
+            //console.log(that.unpaid);
           }
         })
         .catch(error => {});
@@ -131,6 +213,9 @@ export default {
 }
 .page-navbar .mint-tab-item-label {
   font-size: 1rem;
+}
+.mint-tab-container {
+  background-color: #dfe4e8;
 }
 .item {
   margin-top: 0.5rem;

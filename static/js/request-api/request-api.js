@@ -66,9 +66,11 @@ export   const  api={
      //获取购物车列表
      refreshShoppingCartList(params){
         return fetchGet(baseUrl+"/cart/refreshShoppingCartList",params)
+    },
+
+    //获取商品图片
+    refreshProductImpage(params){
+        return fetchGet(baseUrl+"/product/refreshProductImpage",params)
     }
-
-
-
    
 }
