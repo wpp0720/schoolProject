@@ -12,6 +12,14 @@ export   const  api={
     loginOut(params){
         return fetchGet(baseUrl+'/user/loginOut',params)
     },
+    // 修改密码
+    resetPassword(params){
+        return fetchPost(baseUrl+'/user/resetPassword',params)
+    },
+    // 我的喜欢
+    refreshProductLove(params){
+        return fetchGet(baseUrl+'/product/refreshProductLove',params)
+    },
     // 获取登录用户信息
     getUserInfo(params){
         return fetchGet(baseUrl+'/user/getUserInfo',params)

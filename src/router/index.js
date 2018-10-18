@@ -152,12 +152,12 @@ export default new Router({
             name:'Test',
             component:Test
           },
-        /*{
+        {
             path: '/modifyPass',
             name: 'modifyPass',
             component: modifyPass
         },
-        {
+        /*{
             path: '/myRegister',
             name: 'myRegister',
             component: myRegister
