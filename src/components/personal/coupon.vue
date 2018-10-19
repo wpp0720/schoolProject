@@ -33,6 +33,7 @@
  
 <script>
 import {api} from  '../../../static/js/request-api/request-api.js';
+import { scrollLoad } from "../../../static/js/util/scroll-load.js";
 export default {
   data() {
     return {
@@ -45,6 +46,73 @@ export default {
     this.getCouponList();
   },
   methods: {
+      //页面滚动加载数据
+      scrollLoadData: function(loadDataFun, $win) {
+          scrollLoad.getCouponList(loadDataFun, $win, this.pageNumber);
+      },
+      initPage: function() {
+          this.getSpecialDetailsList();
+          //滚动加载数据
+          this.scrollLoadData("getSpecialDetailsList", this);
+          this.initSingle();
+      },
+      getSpecialDetailsList: function() {
+          let _self = this;
+          _self.showLoading = true; //true加载
+          let params = {};
+          params.sessionId = _self.$route.query.sessionId;
+          _self.pageNumber = _self.pageNumber + 1;
+          params.pageNumber = _self.pageNumber;
+          if (_self.pageNumber > _self.lastPageNumber) {
+              _self.pageNumber = _self.pageNumber - 1;
+              _self.showLoading = false;
+              return;
+          }
+          if (!_self.loadDataFinish) {
+              _self.pageNumber = _self.pageNumber - 1;
+              return;
+          }
+          _self.loadDataFinish = false; //加载完成状态
+          params.pageSize = 5;
+          params.searchKey = "";
+          params.cookieUUID = this.$cookies.get("memberuuid") || "";
+          params.orderType = _self.orderType;
+          api.getGoodsList(params)
+              .then(res => {
+                  if (res.status == 200) {
+                      _self.showLoading = false; //隐藏loading图标
+                      _self.loadDataFinish = true;
+                      let goodsList = res.data.data.itemListVos;
+                      _self.lastPageNumber = res.data.data.lastPageNumber;
+
+                      if (_self.pageNumber == 1) {
+                          _self.goodsListInfo = res.data.data;
+                      }
+                      if (goodsList.length <= 0) {
+                          _self.pageNumber = _self.pageNumber - 1;
+                      }
+                      for (let i = 0; i < goodsList.length; i++) {
+                          _self.goodsList.push(goodsList[i]);
+                      }
+                      if (_self.pageNumber >= _self.lastPageNumber) {
+                          _self.endPage = true;
+                          _self.getDefaultPic();
+                      }
+                  } else {
+                      let params = { msg: "获取专场详情错误" };
+                      // GlobalVue.$emit("alert", params);
+                      // GlobalVue.$emit("blackBg", null);
+                  }
+              })
+              .catch(error => {
+                  let params = { msg: "获取专场详情错误" };
+                  // GlobalVue.$emit("alert", params);
+                  // GlobalVue.$emit("blackBg", null);
+              });
+      },
+
+
+
     getCouponList: function() {
       let params = {};
       let _self = this;
