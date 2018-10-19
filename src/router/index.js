@@ -6,7 +6,8 @@ import school from '@/components/school'
 import shopping from '@/components/shopping'
 import contactUS from '@/components/contactUS'
 import teacherTeam from '@/components/teacherTeam'
-import curriculaVariable from '@/components/curriculaVariable'
+import addAsk from '@/components/addAsk'
+import addComment from '@/components/addComment'
 import proDetails from '@/components/proDetails'
 import shopCart from '@/components/shopCart'
 import fillOrder from '@/components/FillOrder'
@@ -57,6 +58,16 @@ export default new Router({
             name: 'school',
             component: school
         },
+        {
+            path: '/addAsk',
+            name: 'addAsk',
+            component: addAsk
+        },
+        {
+            path: '/addComment',
+            name: 'addComment',
+            component: addComment
+        },
         //购物车
         {
             path: '/shopCart',
@@ -90,11 +101,11 @@ export default new Router({
             name: 'teacherTeam',
             component: teacherTeam
         },
-        {
-            path: '/curriculaVariable',
-            name: 'curriculaVariable',
-            component: curriculaVariable
-        },
+        // {
+        //     path: '/curriculaVariable',
+        //     name: 'curriculaVariable',
+        //     component: curriculaVariable
+        // },
         {
             path: '/PersonalIndex',
             name: 'PersonalIndex',

@@ -86,6 +86,14 @@ export   const  api={
     //插入订单
     insertSaleOrder(params){
         return fetchGet(baseUrl+"/product/insertSaleOrder",params)
+    },
+      //获取商品评论
+      getProductComment(params){
+        return fetchGet(baseUrl+"/product/getProductComment",params)
+    },
+     //获取商品提问
+     getProductAsk(params){
+        return fetchGet(baseUrl+"/product/getProductAsk",params)
     }
    
 }
