@@ -57,14 +57,16 @@
 				let loginData = new URLSearchParams();
                 loginData.append('username',this.userName)
 				loginData.append('password',this.myPassword)
+
 				// let returnUrl=window.location.href;
                 // console.log(returnUrl);
                 api.submitLogin(loginData)
 					.then(res=>{
-                        console.log(res);
+                        //console.log(res);
                         if(res.code == 1){
-						    	_self.active = true;
-							    _self.$router.push({path: "/coupon"});
+						    	this.active = true;
+							    this.$router.push({path: "/like"});
+
 						}else if(res.code == 0){
 							// alert('用户名或密码错误');
 							let instance = Toast('用户名或密码错误');

@@ -29,18 +29,30 @@
             <div class="old-price">
               价格<span class="priceold">¥{{productObj.purchasePrice}}</span></div>
           </div> <!---->
-          <div class="seat"><span
-            class="seat-title">商品规格</span>
-            <div class="seat-box"><span
-              class="seat-content">
-				
-			</span>
+          <div class="seat">
+            <span  class="seat-title">商品规格</span>
+            <div class="seat-box"><span  class="seat-content"></span>
               <svg aria-hidden="true" class="icon icon-color">
                 <use xlink:href="#icon-next"></use>
               </svg>
             </div>
           </div> <!---->
-          <div class="void"></div> <!----> </div>
+
+          <div class="void"></div> <!----> 
+          <div class="seat">
+            <span  class="seat-title">评价({{productCommentList.length}})</span>
+            <div class="seat-box"><span  class="seat-content"></span>
+                  <div class="add-question" v-on:click="gotoComment"><span></span>去评价</div>
+            </div>
+          </div> <!---->
+            <div class="void"></div> <!----> 
+          <div class="seat">
+            <span  class="seat-title">提问({{productAskList.length}})</span>
+            <div class="seat-box"><span  class="seat-content"></span>
+              <div class="add-question" v-on:click="gotoAsk"><span></span>去提问</div>
+            </div>
+          </div> <!---->
+          </div>
       </mt-tab-container-item>
       <mt-tab-container-item id="2" class="details">
         <div class="goods-evaluate">
@@ -60,7 +72,7 @@
       </mt-tab-container-item>
     </mt-tab-container>
     <div class="bottom">
-      <div class="shop-car">
+      <div class="shop-car"  @click="shopppingCartList()">
         <div class="circle">{{shoppingcartcount}}</div>
         <svg aria-hidden="true" class="icon">
           <use xlink:href="#icon-gouwuche1"></use>
@@ -75,12 +87,9 @@
         <div class="sign-up" v-show="ask" @click="addProductToCart()" >
           加入购物车
         </div>
-        <!--<div class="sign-up" style="display: none;">-->
-          <!--去提问-->
-        <!--</div>-->
 
             <div class="join-car">
-              <router-link  tag="div"  :to="{path:'/FillOrder',query:{id:item.ItemID}}"  v-for="item in shopData.Data"  >立即购买</router-link>
+              <div   v-on:click="nowPay" >立即购买</div>
             </div>
 
       </div>
@@ -95,6 +104,7 @@
   import Vue from "vue";
   import {Navbar, TabItem} from 'mint-ui';
   import BScroll from 'better-scroll';
+  import Router from "vue-router";
   import shopData from "./shopData.json";
   // import {proDetailApi} from '../service/api';
   import { MessageBox } from 'mint-ui';
@@ -114,6 +124,8 @@
         ask:true,
         showAttentionAlert:false,
         attentionText:"加入购物车成功",
+        productCommentList:[],
+        productAskList:[],
         shoppingcartcount:0//购物车数量
       };
 
@@ -130,21 +142,104 @@
     },
     mounted() {
        this.getProductDetail();
+       //获取购物车列表
+       this.refreshShoppingCartList();
+       this.getProductComment();
+       this.getProductAsk();
     },
     created() {
       // 初始化 better-scroll 必须要等 dom 加载完毕
-      setTimeout(() => {
-        this._initSrcoll()
-      }, 1000)
+      // setTimeout(() => {
+      //   this._initSrcoll()
+      // }, 1000)
     },
     methods: {
-      _initSrcoll() {
-        this.scroll = new BScroll(this.$refs.pro.$el, {
-          // 获取 scroll 事件，用来监听。
-          probeType: 3,
-          click: true
+      // _initSrcoll() {
+      //   this.scroll = new BScroll(this.$refs.pro.$el, {
+      //     // 获取 scroll 事件，用来监听。
+      //     probeType: 3,
+      //     click: true
+      //   })
+      // },
+      //购物车列表
+    shopppingCartList:function(){
+          this.$router.push({path: "/shopCart"});
+    },
+    gotoComment:function(){
+           this.$router.push({path: "/addComment"});
+    },
+    gotoAsk:function(){
+           this.$router.push({path: "/addAsk"});
+    },
+    //立即购买
+    nowPay:function(){
+        let orderIdArray=[];
+        let joinAuctionKey = "add_order";
+        let _self = this;
+        let orderObj={};
+        orderObj.count=1;
+        orderObj.createTime=_self.productObj.createTime;
+        orderObj.guid=_self.productObj.guid;
+        orderObj.id=_self.productObj.id;
+        orderObj.price=_self.productObj.salePrice;
+        orderObj.productCode=_self.productObj.productCode;
+        orderObj.productId=_self.productObj.productId;
+        orderObj.productName=_self.productObj.productName;
+        orderIdArray.push(orderObj);
+        console.log(orderObj);
+        localStorage.setItem(joinAuctionKey, JSON.stringify(orderIdArray));
+        this.$router.push({path: "/fillOrder"});
+    },
+    //获取商品评价
+    getProductComment: function() {
+      let params ={};
+      let _self = this;
+      params.product_id=_self.$route.query.id;;
+      api.getProductComment(params)
+        .then(res => {
+          if (res.status == 200) {
+             let code=res.data.code;
+             if(code==1){
+               let result=res.data.data;
+                _self.productCommentList=result;
+             }
+          } else {
+            let params = { msg: "获取商品明细错误" };
+            // GlobalVue.$emit("alert", params);
+            // GlobalVue.$emit("blackBg", null);
+          }
         })
-      },
+        .catch(error => {
+          let params = { msg: "获取商品明细错误" };
+          // GlobalVue.$emit("alert", params);
+          // GlobalVue.$emit("blackBg", null);
+        });
+    },
+    //获取商品提问
+    getProductAsk: function() {
+      let params ={};
+      let _self = this;
+      params.product_id=_self.$route.query.id;;
+      api.getProductAsk(params)
+        .then(res => {
+          if (res.status == 200) {
+             let code=res.data.code;
+             if(code==1){
+               let result=res.data.data;
+               _self.productAskList=result;
+             }
+          } else {
+            let params = { msg: "获取商品明细错误" };
+            // GlobalVue.$emit("alert", params);
+            // GlobalVue.$emit("blackBg", null);
+          }
+        })
+        .catch(error => {
+          let params = { msg: "获取商品明细错误" };
+          // GlobalVue.$emit("alert", params);
+          // GlobalVue.$emit("blackBg", null);
+        });
+    },
     //获取商品明细
     getProductDetail: function() {
       let params ={};
@@ -170,19 +265,43 @@
           // GlobalVue.$emit("blackBg", null);
         });
     },
-    //购物车增加
-    addProductToCart: function() {
+    //获取购物车列表
+      refreshShoppingCartList: function() {
       let params ={};
       let _self = this;
-      params.product_id=_self.$route.query.id;;
-      api.addProductToCart(params)
+      api.refreshShoppingCartList(null)
         .then(res => {
           if (res.status == 200) {
-             let code=res.data.code;
-             if(code==1){
-               let result=res.data.data;
-               console.log(result);
-             }
+              let code=res.data.code;
+              if(code==1){
+                 let shoppingList=res.data.data;
+                 if(shoppingList&&shoppingList.length>0){
+                   _self.shoppingcartcount=shoppingList.length;
+                 }
+              }
+          } else {
+            let params = { msg: "获取购物车列表错误" };
+            // GlobalVue.$emit("alert", params);
+            // GlobalVue.$emit("blackBg", null);
+          }
+        })
+        .catch(error => {
+          let params = { msg: "获取购物车列表错误" };
+          // GlobalVue.$emit("alert", params);
+          // GlobalVue.$emit("blackBg", null);
+        });
+    },
+    //购物车增加
+    addProductToCart: function() {
+      let _self = this;
+      let data = new URLSearchParams();
+      data.append('product_id',_self.$route.query.id);
+      api.addProductToCart(data)
+        .then(res => {
+            let code=res.code;
+          if (code == 1) {
+            _self.shoppingcartcount=_self.shoppingcartcount+1;
+        
           } else {
             let params = { msg: "加入购物车错误" };
             // GlobalVue.$emit("alert", params);
@@ -200,6 +319,19 @@
   }
 
 </script>
+<style scoped>
+.seat .add-question{
+ width: 200px;
+ height: 60px;
+ border-radius: 30px;
+ color: #1e88f5;
+ border: 1px solid #1e88f5;
+ background-color: #E0EEEE;
+ text-align: center;
+ line-height: 60px;
+ float: right;
+}
+</style>
 <style lang="less">
   .mint-tab-item.is-selected {
     .mint-tab-item-label {
@@ -225,6 +357,7 @@
     right: 0;
     left: 0;
     bottom: 99px;
+    overflow: auto;
     .mint-tab-container-wrap, .mint-tab-container-item {
       position: absolute;
       top: 0;
@@ -488,6 +621,7 @@
         .seat-title {
           width: 160px;
           font-size: 30px;
+          display: inline-block;
           color: #999;
         }
         .seat-box {

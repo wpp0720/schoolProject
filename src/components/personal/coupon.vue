@@ -37,6 +37,7 @@ import { scrollLoad } from "../../../static/js/util/scroll-load.js";
 export default {
   data() {
     return {
+
       couponData:[],
       selected: "1",
       defaultImg: require("../../assets/img/coupon.png")
@@ -44,6 +45,7 @@ export default {
   },
   mounted: function() {
     this.getCouponList();
+    this.getUserInfo();
   },
   methods: {
       //页面滚动加载数据
@@ -115,6 +117,7 @@ export default {
 
     getCouponList: function() {
       let params = {};
+
       let _self = this;
       params.page = 1;
       params.row = 5;
@@ -133,6 +136,18 @@ export default {
           }
         })
         .catch(error => {});
+    },
+    getUserInfo: function() {
+      // let params = {};
+      let _self = this;
+      api.getUserInfo()
+        .then(res => {
+          if (res.status == 200) {
+              console.log(res);
+             }
+          },()=>{
+					
+				});
     },
   }
 };

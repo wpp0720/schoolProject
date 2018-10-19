@@ -1,21 +1,21 @@
 d<template>
   <div class="pages">
     <div class="body">
-      <div class="order-shopping" v-for="item in FillOrder.Data" >
-        <div class="order-shopping-hd">{{item.CampusName}}</div>
+      <div class="order-shopping" v-for="item in FillOrder" >
+        <!-- <div class="order-shopping-hd">{{item.productName}}</div> -->
         <div class="order-shopping-bd">
-          <div class="row-hd-l"  :style="getBackground(item.Image)"></div>
+          <div class="row-hd-l"  :style="getBackground('//cdn01.xiaogj.com/file/mall/default/goods.png')"></div>
           <div class="row-hd-r">
-            <div class="name">{{item.Name}}</div>
+            <div class="name">{{item.productName}}</div>
             <div class="detail">
-              <div class="price">¥{{(item.Money).toFixed(2)}}</div>
-              <div class="count">x{{item.num}}</div>
+              <div class="price">¥{{(item.price).toFixed(2)}}</div>
+              <div class="count">x{{item.count}}</div>
             </div>
           </div>
         </div>
         <div class="order-shopping-ft">
-          共{{item.num}}件商品
-          <span class="amount">小计：<span class="price">¥{{((item.num)*(item.Money)).toFixed(2)}}</span></span>
+           共{{FillOrder.length}}件商品
+          <span class="amount">小计：<span class="price">¥{{((item.count)*(item.price)).toFixed(2)}}</span></span>
         </div>
       </div>
       <div class="line"></div>
@@ -37,16 +37,16 @@ d<template>
       <div class="order-memo">
         <div class="item-name">备注：</div>
         <div class="memo-wrap">
-          <input  type="text" placeholder="选填，对本次交易的说明">
+          <input  type="text" placeholder="选填，对本次交易的说明" v-model="remark">
         </div>
       </div>
       <div class="order-student">
-        使用学员：{{this.StudentName}}<span>（{{this.StudentSex}}）</span>
+        使用学员：{{userData.name}}<span v-if="userData.sex">（{{userData.sex}}）</span>
       </div>
     </div>
     <div class="footer">
       <div class="footer-l">共<span  class="count">{{getTotalNum()}}</span>件，合计: <span class="price">¥{{getTotalMoney().toFixed(2)}}</span></div>
-      <div class="footer-r">提交订单</div>
+      <div class="footer-r" v-on:click="submitOrder()">提交订单</div>
     </div>
     <mt-actionsheet cancel-text="" class="order-scheme"
       :actions="actions"
@@ -59,6 +59,7 @@ d<template>
   import Vue from "vue";
   import FillOrder from "./FillOrder.json";
   import { Loadmore } from 'mint-ui';
+   import { api } from "../../static/js/request-api/request-api.js";
   Vue.component(Loadmore.name, Loadmore);
   import { Actionsheet,Cell } from 'mint-ui';
   Vue.component(Actionsheet.name, Actionsheet);
@@ -82,9 +83,13 @@ d<template>
             }
           ],
           FillOrder: FillOrder,
-          "StudentName":"张跃栊",
-          "StudentSex":"男"
+          remark:"",
+          userData:{}
         }
+      },
+      mounted() {
+        this.getOrderData();
+        this.getUserInfo();
       },
       methods: {
         showSheet(){
@@ -92,15 +97,85 @@ d<template>
         },
         getTotalNum(){
           let totalNum = 0;
-          this.FillOrder.Data.forEach((item,index)=>{
-            totalNum+=Number(item.num);
+          this.FillOrder.forEach((item,index)=>{
+            totalNum+=Number(item.count);
           });
           return totalNum;
         },
+        getOrderData(){
+          let joinAuctionKey = "add_order";
+          let addOrderArray=localStorage.getItem(joinAuctionKey);
+          this.FillOrder=JSON.parse(addOrderArray);
+        },
+      //添加订单
+      submitOrder(){
+      let params ={};
+      let _self = this;
+      params.couponinfo=null;
+      let newAddOrderArray=[];
+      for(let i=0;i<this.FillOrder.length;i++){
+        let fillOrder=this.FillOrder[i];
+        let orderObj={};
+        orderObj.standardPrice=fillOrder.price;
+        orderObj.productCode=fillOrder.productCode;
+        orderObj.productName=fillOrder.productName;
+        orderObj.productId=fillOrder.productId;
+        orderObj.realPrice=fillOrder.price;
+        orderObj.standardMoney=fillOrder.price*fillOrder.count.toFixed(2);
+        orderObj.realMoney=fillOrder.price*fillOrder.count.toFixed(2);
+        orderObj.productCount=fillOrder.count;
+        orderObj.productType=2;
+        orderObj.discount=0;
+        newAddOrderArray.push(orderObj);
+      }
+      console.log(JSON.stringify(newAddOrderArray));
+      params.orderdetailinfo =JSON.stringify(newAddOrderArray);
+      params.remark=this.remark;
+      api.insertSaleOrder(params)
+        .then(res => {
+          console.log(res);
+          if (res.status == 200) {
+             let code=res.data.code;
+             if(code==1){
+               alert("成功");
+             }
+          } else {
+            let params = { msg: "获取商品明细错误" };
+            // GlobalVue.$emit("alert", params);
+            // GlobalVue.$emit("blackBg", null);
+          }
+        })
+        .catch(error => {
+          let params = { msg: "获取商品明细错误" };
+          // GlobalVue.$emit("alert", params);
+          // GlobalVue.$emit("blackBg", null);
+        });
+
+      },
+      //获取用户登录信息
+      getUserInfo(){
+      let _self = this;
+      api.getUserInfo(null)
+        .then(res => {
+          if (res.status == 200) {
+                let code=res.data.code;
+               _self.userData=res.data.data;
+          } else {
+            let params = { msg: "获取用户登录信息错误" };
+            // GlobalVue.$emit("alert", params);
+            // GlobalVue.$emit("blackBg", null);
+          }
+        })
+        .catch(error => {
+          let params = { msg: "获取用户登录信息错误" };
+          // GlobalVue.$emit("alert", params);
+          // GlobalVue.$emit("blackBg", null);
+         });
+        },
         getTotalMoney(){
           let totalMoney = 0;
-          this.FillOrder.Data.forEach((item,index)=>{
-            totalMoney+=Number(item.Money);
+          this.FillOrder.forEach((item,index)=>{
+            totalMoney+=Number(item.price*item.count);
           });
           return totalMoney;
         },
