@@ -1,5 +1,5 @@
 //直播api请求
-import { fetchPost,fetchGet } from '../request-util.js'
+import { fetchPost,fetchGet,fetchDelete} from '../request-util.js'
 import {baseLiveAjaxUrl} from '../config/global-config.js'
 let baseUrl = '/api';
 // let baseUrl = 'http://api.rexuejiewu.com.cn';
@@ -94,6 +94,27 @@ export   const  api={
      //获取商品提问
      getProductAsk(params){
         return fetchGet(baseUrl+"/product/getProductAsk",params)
+    },
+    //获取商品提问
+    addProductAsk(params){
+        return fetchPost(baseUrl+"/product/addProductAsk",params)
+    },
+    //获取商品评论
+    addProductComment(params){
+        return fetchPost(baseUrl+"/product/addProductComment",params)
+    },
+     //增加商品喜欢
+     addProductLove(params){
+        return fetchPost(baseUrl+"/product/addProductLove",params)
+    },
+     //删除商品喜欢
+     deleteProductLove(params){
+        return fetchPost(baseUrl+"/product/deleteProductLove",params)
+    },
+    //删除购物车
+    deleteProductToCart(params){
+        return fetchDelete(baseUrl+"/cart/deleteProductToCart",{'data':params})
     }
+
    
 }

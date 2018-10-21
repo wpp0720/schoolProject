@@ -31,6 +31,18 @@ export function fetchPost(url, params) {
       })
   })
 }
+//返回一个Promise(发送delete请求)
+export function fetchDelete(url, params) {
+  return new Promise((resolve, reject) => {
+    axios.delete(url, params)
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error);
+      })
+  })
+}
 //返回一个Promise(发送get请求)
 export function fetchGet(url,params) {
   return new Promise((resolve, reject) => {

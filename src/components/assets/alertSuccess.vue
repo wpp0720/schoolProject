@@ -16,6 +16,7 @@
   text-align: center;
   height: 80px;
   left: 50%;
+  line-height: 80px;
   transform: translateX(-50%);
   border-radius: 8px;
 }

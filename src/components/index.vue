@@ -52,8 +52,8 @@
    <div class="tobbar">
     <dl class="tobbar-item"><dt class="tobbar-icon"><icon name="home" scale="2"></icon></dt><dd class="tobbar-text">首页</dd></dl>
     <dl class="tobbar-item"><dt class="tobbar-icon"><icon name="book" scale="2"></icon></dt><dd class="tobbar-text">选课</dd></dl>
-     <dl class="tobbar-item"><dt class="tobbar-icon"><icon name="server" scale="2"></icon></dt><dd class="tobbar-text">商城</dd></dl>
-     <dl class="tobbar-item"><dt class="tobbar-icon"><icon name="cart-arrow-down" scale="2"></icon></dt><dd class="tobbar-text">购物车</dd></dl>
+     <dl class="tobbar-item" v-on:click="openShopping"><dt class="tobbar-icon"><icon name="server" scale="2"></icon></dt><dd class="tobbar-text">商城</dd></dl>
+     <dl class="tobbar-item" v-on:click="openShoppingCart"><dt class="tobbar-icon"><icon name="cart-arrow-down" scale="2"></icon></dt><dd class="tobbar-text">购物车</dd></dl>
      <dl class="tobbar-item"><dt class="tobbar-icon"><icon name="user" scale="2"></icon></dt><dd class="tobbar-text">我的</dd></dl>
    </div>
   </div>
@@ -61,6 +61,7 @@
 
 <script>
   import vuePickers from 'vue-pickers'
+  import Router from "vue-router";
 export default {
   name: "index",
   components: {vuePickers},
@@ -116,6 +117,14 @@ export default {
     schoolAreaclose() {
       this.schoolAreaPopupVisible = false
     },
+    //打开商城分类
+    openShopping:function(){
+      this.$router.push({path: "/shopping"});
+    },
+    //打开购物车
+    openShoppingCart:function(){
+     this.$router.push({path: "/shopCart"});
+    },
     schoolAreaconfirmFn(val) {
       this.schoolAreaPopupVisible = false
       if(val.select1.text.length <= 4){
@@ -131,7 +140,7 @@ export default {
   }
 };
 </script>
-<style lang="less">
+<style lang="less" scoped>
 
   #index{
     height: 100%;

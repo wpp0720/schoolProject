@@ -9,14 +9,15 @@
           </svg>
         </span>
       </div>
+      <div class="edit"><span v-if="!isEdit" v-on:click="editShopCart(1)">编辑</span><span v-if="isEdit" v-on:click="editShopCart(0)">完成</span></div>
       <div class="shop-list"  v-for="(item,index) in list">
         <div class="list-wrap" >
-          <div class="list-header">
+          <div class="list-header" v-if="false">
             <span  class="cname">
               <span  class="cname-icon">
                <!-- <input  class="icon" type="checkbox" id="checkA]" v-on:click="checkAll($event.currentTarget)"/><label for="checkA"></label> -->
               </span>
-             {{item.productName}}
+             <!-- {{item.productName}} -->
         	</span>
 
           </div>
@@ -36,13 +37,16 @@
                     <div  class="name">{{item.productName}}</div>
                     <div class="detail">
                       <span  class="price">¥{{item.price}}</span>
-                      <span class="count">
+                      <span class="count" v-if="!isEdit">
+                        x{{item.count}}
+                      </span>
+                      <span class="count" v-if="isEdit">
                         <span>
                           <em v-on:click="minius(item.productId,index)">-</em>
                           <input type="number" v-model="item.count" />
                           <em v-on:click="add(item.productId,index)">+</em>
                         </span>
-                        <span><button v-on:click="del(index)">删除</button></span>
+                        <span><button v-on:click="del(index,item.productId)">删除</button></span>
                       </span>
                     </div>
                   </div>
@@ -100,7 +104,8 @@
       return {
         list: list,
         checkeds: {},
-        orderIdArray:[]
+        orderIdArray:[],
+        isEdit:false
       }
     },
     computed: {
@@ -131,9 +136,18 @@
       getBackground:function(name){
         return "background-image:url("+name+")";
       },
-      del: function (index) {
-        this.list[index].data.splice(index1, 1);
-        this.checkeds.splice(index,1); //同时删除对应的选中状态标识
+      //编辑购物车
+      editShopCart:function(over){
+         if(over==1){
+           this.isEdit=true;
+         }else{
+           this.isEdit=false;
+         }
+      },
+      del: function (index,productId) {
+        console.log(productId);
+        this.list.splice(index, 1);//删除数组中指定元素
+        this.deleteProductToCart(productId);
       },
       add: function (productId,index) {
         this.list[index].count++;
@@ -181,6 +195,33 @@
         localStorage.setItem(joinAuctionKey, JSON.stringify(_self.orderIdArray));
       // }
         this.$router.push({path: "/fillOrder"});
+    },
+     //删除购物车
+     deleteProductToCart: function(id) {
+      let params ={};
+      let _self = this;
+      params.product_id=id;
+      let data = new URLSearchParams();
+      data.append('product_id',id);
+      api.deleteProductToCart(data)
+        .then(res => {
+          console.log(res);
+          if (res.status == 200) {
+                let code=res.data.code;
+                if(code===1){
+                  _self.list=res.data.data;
+                }
+          } else {
+            let params = { msg: "删除购物车错误" };
+            // GlobalVue.$emit("alert", params);
+            // GlobalVue.$emit("blackBg", null);
+          }
+        })
+        .catch(error => {
+          let params = { msg: "删除购物车错误" };
+          // GlobalVue.$emit("alert", params);
+          // GlobalVue.$emit("blackBg", null);
+        });
     },
     //编辑购物车
      editProductToCart: function(id,count) {
@@ -230,6 +271,15 @@
   .void{
     height: 2px;
     background-color: #eef1f6;
+  }
+  .edit{
+    width: 710px;
+    height: 80px;
+    padding-left: 20px;
+    line-height: 80px;
+    border-bottom: 1px solid #ccc;
+    text-align: right;
+    padding-right: 20px;
   }
   button{
     width: 80px;

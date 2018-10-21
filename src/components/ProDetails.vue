@@ -41,10 +41,14 @@
           <div class="void"></div> <!----> 
           <div class="seat">
             <span  class="seat-title">评价({{productCommentList.length}})</span>
-            <div class="seat-box"><span  class="seat-content"></span>
+            <!-- <div class="seat-box"><span  class="seat-content"></span>
                   <div class="add-question" v-on:click="gotoComment"><span></span>去评价</div>
-            </div>
-          </div> <!---->
+            </div> -->
+          </div>
+          <div class="commnet-list" v-for="(productComment,index) in productCommentList"  :key="index">
+              <span>{{productComment.askContent}}</span>
+          </div>
+           <!---->
             <div class="void"></div> <!----> 
           <div class="seat">
             <span  class="seat-title">提问({{productAskList.length}})</span>
@@ -52,6 +56,11 @@
               <div class="add-question" v-on:click="gotoAsk"><span></span>去提问</div>
             </div>
           </div> <!---->
+           <div class="commnet-list" v-for="(productAsk,index) in productAskList"  :key="index">
+              <div><span style="font-weight:800">问：</span><span>{{productAsk.askContent}}</span></div>
+              <div style="margin-top:20px;"><span style="font-weight:800">答：</span><span>{{productAsk.replyContent}}</span></div>
+          </div>
+          
           </div>
       </mt-tab-container-item>
       <mt-tab-container-item id="2" class="details">
@@ -78,7 +87,12 @@
           <use xlink:href="#icon-gouwuche1"></use>
         </svg>
       </div>
-      <div class="collect">
+      <div class="collect" v-if="false" v-on:click="addProductLove()">
+        <svg aria-hidden="true" class="icon">
+          <use xlink:href="#icon-xihuan1"></use>
+        </svg>
+      </div>
+       <div class="collect-like" v-on:click="deleteProductLove()">
         <svg aria-hidden="true" class="icon">
           <use xlink:href="#icon-xihuan1"></use>
         </svg>
@@ -165,11 +179,15 @@
     shopppingCartList:function(){
           this.$router.push({path: "/shopCart"});
     },
-    gotoComment:function(){
-           this.$router.push({path: "/addComment"});
-    },
+    // gotoComment:function(){
+    //        let id=this.$route.query.id;
+    //        let productName=this.productObj.productName;
+    //        this.$router.push({path: "/addComment",query: {id: id}});
+    // },
     gotoAsk:function(){
-           this.$router.push({path: "/addAsk"});
+           let id=this.$route.query.id;
+           let productName=this.productObj.productName;
+           this.$router.push({path: "/addAsk", query: {id: id,productName:productName}});
     },
     //立即购买
     nowPay:function(){
@@ -291,6 +309,52 @@
           // GlobalVue.$emit("blackBg", null);
         });
     },
+    //增加商品喜欢
+    addProductLove: function() {
+      let _self = this;
+      let data = new URLSearchParams();
+      data.append('product_id',_self.$route.query.id);
+      api.addProductLove(data)
+        .then(res => {
+            let code=res.code;
+            if (code == 1) {
+            // _self.shoppingcartcount=_self.shoppingcartcount+1;
+        
+          } else {
+            let params = { msg: "加入购物车错误" };
+            // GlobalVue.$emit("alert", params);
+            // GlobalVue.$emit("blackBg", null);
+          }
+        })
+        .catch(error => {
+          let params = { msg: "加入购物车错误" };
+          // GlobalVue.$emit("alert", params);
+          // GlobalVue.$emit("blackBg", null);
+        });
+    },
+    //删除商品喜欢
+    deleteProductLove: function() {
+      let _self = this;
+      let data = new URLSearchParams();
+      data.append('product_id',_self.$route.query.id);
+      api.deleteProductLove(data)
+        .then(res => {
+            let code=res.code;
+          if (code == 1) {
+            // _self.shoppingcartcount=_self.shoppingcartcount+1;
+        
+          } else {
+            let params = { msg: "加入购物车错误" };
+            // GlobalVue.$emit("alert", params);
+            // GlobalVue.$emit("blackBg", null);
+          }
+        })
+        .catch(error => {
+          let params = { msg: "加入购物车错误" };
+          // GlobalVue.$emit("alert", params);
+          // GlobalVue.$emit("blackBg", null);
+        });
+    },
     //购物车增加
     addProductToCart: function() {
       let _self = this;
@@ -313,7 +377,7 @@
           // GlobalVue.$emit("alert", params);
           // GlobalVue.$emit("blackBg", null);
         });
-    }
+     }
     }
 
   }
@@ -331,8 +395,16 @@
  line-height: 60px;
  float: right;
 }
+.commnet-list{
+  width: 710px;
+  padding-left: 20px;
+  padding-bottom: 20px;
+  padding-top: 20px;
+  padding-right: 20px;
+  border-bottom: 1px solid #eef1f6;
+}
 </style>
-<style lang="less">
+<style lang="less" scoped>
   .mint-tab-item.is-selected {
     .mint-tab-item-label {
       border-bottom: 2px solid #1e88f5;
@@ -424,7 +496,7 @@
       width: 100%;
       height: 98px;
       background-color: #fff;
-      .collect, .not-sell, .shop-car {
+      .collect,.collect-like, .not-sell, .shop-car {
         width: 19%;
         line-height: 98px;
         text-align: center;
@@ -436,6 +508,12 @@
       }
       .collect{
          background-image: url(../../static/img/like67.png);
+         background-size:50px 50px;
+         background-repeat:no-repeat;
+         background-position:center; 
+      }
+      .collect-like{
+         background-image: url(../../static/img/heart-icon.png);
          background-size:50px 50px;
          background-repeat:no-repeat;
          background-position:center; 
